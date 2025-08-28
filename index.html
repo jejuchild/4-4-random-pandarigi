@@ -38,4 +38,289 @@
     .btn.ghost{background:transparent}
     .btn.success{background:linear-gradient(180deg,#16a34a,#15803d); border-color:#1a6b3d}
 
-    .opt{display:flex; gap:
+    .opt{display:flex; gap:10px; align-items:center}
+    .opt input[type="text"]{height:38px; padding:0 10px; border-radius:10px; border:1px solid #262b3d; background:#0e111a; color:var(--text)}
+
+    .teams{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
+    @media(max-width:700px){ .teams{grid-template-columns:1fr} }
+    .team{border:1px solid #24273a; border-radius:16px; background:linear-gradient(180deg,#141721,#101320)}
+    .team .th{display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid #202335}
+    .team .th h4{margin:0; font-size:1.05rem}
+    .team .th .emoji{font-size:1.2rem}
+    .team ol{margin:0; padding:12px 20px 18px 28px}
+    .team ol li{margin:.3rem 0; padding:.15rem 0}
+
+    .muted{color:var(--muted)}
+    .stat{display:flex; gap:10px; flex-wrap:wrap}
+    .pill{border:1px solid #273045; border-radius:999px; padding:.2rem .65rem; font-size:.9rem; color:#cbd5e1}
+
+    .footer{margin-top:18px; display:flex; gap:10px; flex-wrap:wrap}
+
+    .alert{margin-top:10px; padding:10px 12px; border:1px solid #3a2a2a; background:#1a1010; color:#ffd1d1; border-radius:12px}
+
+    .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden}
+    .confetti span{position:absolute; top:-10px; font-size:16px; animation:drop 2.2s linear forwards; opacity:.95}
+    @keyframes drop{to{transform:translateY(105vh) rotate(540deg); opacity:.9}}
+
+    .small{font-size:.88rem}
+    .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; border:1px solid #2a2f45; background:#101428; padding:.08rem .4rem; border-radius:6px}
+
+    .ghostline{border-top:1px dashed #2a2f45; margin:12px 0}
+  </style>
+</head>
+<body>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+  <div class="wrap">
+    <header>
+      <div class="badge">제15회 SNUPOOL배 대학부 수영대회 · 이벤트 게임</div>
+      <h1>4:4 랜덤 판다리기</h1>
+      <p class="small">참가자 텍스트를 붙여넣고 <span class="kbd">추첨</span>을 누르면 물개/수달/돌고래/카피바라 팀으로 4명씩, 총 16명을 자동 배정합니다. 모든 처리는 브라우저에서만 이뤄집니다.</p>
+    </header>
+
+    <div class="grid" role="main">
+      <section class="card" aria-labelledby="input-head">
+        <div class="head"><h3 id="input-head">참가자 입력</h3>
+          <div class="row">
+            <button class="btn ghost small" id="btnSample" type="button">예시 불러오기</button>
+          </div>
+        </div>
+        <div class="body">
+          <label for="names" class="hint">쉼표(,) 또는 줄바꿈으로 구분 · 공백/중복 자동 정리</label>
+          <textarea id="names" placeholder="예) 홍길동, 김영희, 이철수, ..."></textarea>
+          <div class="ghostline"></div>
+          <div class="row" style="justify-content:space-between">
+            <div class="stat">
+              <span class="pill" id="statTotal">총 입력 0명</span>
+              <span class="pill" id="statUnique">중복 제거 후 0명</span>
+              <span class="pill" id="statDup" title="중복으로 제거된 수">중복 0명</span>
+            </div>
+            <div class="opt">
+              <label class="small" for="seed">시드(선택):</label>
+              <input type="text" id="seed" placeholder="같은 시드 = 같은 결과" />
+              <label class="small" style="display:flex; gap:6px; align-items:center">
+                <input type="checkbox" id="dedupe" checked /> 중복 제거
+              </label>
+            </div>
+          </div>
+          <div class="footer">
+            <button class="btn primary" id="btnDraw" type="button">🎲 랜덤 추첨 (16명 선발)</button>
+            <button class="btn" id="btnShuffle" type="button">🔁 다시 섞기</button>
+            <button class="btn ghost" id="btnClear" type="button">🧹 초기화</button>
+          </div>
+          <div id="alert" class="alert" style="display:none"></div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="result-head">
+        <div class="head"><h3 id="result-head">결과</h3>
+          <div class="row">
+            <button class="btn small" id="btnCopy" type="button">📋 결과 복사</button>
+            <button class="btn small" id="btnCSV" type="button">⬇️ CSV 다운로드</button>
+          </div>
+        </div>
+        <div class="body">
+          <div class="teams" id="teams"></div>
+          <div id="benchWrap" style="margin-top:10px; display:none">
+            <div class="ghostline"></div>
+            <p class="muted small" id="benchTitle">미선발 명단 (0명)</p>
+            <div id="bench" class="small"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer style="margin-top:22px; color:var(--muted)" class="small">
+      팁: <span class="kbd">Cmd/Ctrl + Enter</span> 로 즉시 추첨 · 입력 내용은 로컬에 자동 저장됩니다.
+    </footer>
+  </div>
+
+<script>
+(function(){
+  const $ = sel => document.querySelector(sel);
+  const namesEl = $('#names');
+  const dedupeEl = $('#dedupe');
+  const seedEl = $('#seed');
+  const alertEl = $('#alert');
+  const teamsEl = $('#teams');
+  const benchEl = $('#bench');
+  const benchWrapEl = $('#benchWrap');
+  const statTotal = $('#statTotal');
+  const statUnique = $('#statUnique');
+  const statDup = $('#statDup');
+  const TEAM_INFO = [
+    { key:'물개', emoji:'🦭' },
+    { key:'수달', emoji:'🦦' },
+    { key:'돌고래', emoji:'🐬' },
+    { key:'카피바라', emoji:'🐹' }, // 카피바라 이모지 부재로 대체
+  ];
+
+  // --- LocalStorage hydration ---
+  const LS_KEY = 'snupool_random_pandarigi_v1';
+  try{ const saved = JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(saved && saved.text){ namesEl.value = saved.text; seedEl.value = saved.seed||''; dedupeEl.checked = !!saved.dedupe; } }catch(e){}
+
+  // --- Utility: seeded RNG (xmur3 + mulberry32) ---
+  function xmur3(str){ let h=1779033703 ^ str.length; for(let i=0;i<str.length;i++){ h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h<<13) | (h>>>19); } return function(){ h = Math.imul(h ^ (h>>>16), 2246822507); h = Math.imul(h ^ (h>>>13), 3266489909); return (h ^= h>>>16)>>>0; } }
+  function mulberry32(a){ return function(){ let t = a += 0x6D2B79F5; t = Math.imul(t ^ (t>>>15), t | 1); t ^= t + Math.imul(t ^ (t>>>7), t | 61); return ((t ^ (t>>>14)) >>> 0) / 4294967296; } }
+  function rngFromSeed(seed){ if(!seed) return Math.random; const seedFn = xmur3(String(seed)); const r = mulberry32(seedFn()); return r; }
+
+  // --- Parse input ---
+  function parseNames(){
+    const raw = namesEl.value.replace(/\n/g, ',');
+    const arr = raw.split(',').map(s=>s.trim()).filter(Boolean);
+    const total = arr.length;
+    let unique = arr;
+    let dups = 0;
+    if(dedupeEl.checked){
+      const seen = new Set();
+      unique = [];
+      for(const n of arr){ if(!seen.has(n)){ unique.push(n); seen.add(n); } else { dups++; } }
+    }
+    statTotal.textContent = `총 입력 ${total}명`;
+    statUnique.textContent = `중복 제거 후 ${unique.length}명`;
+    statDup.textContent = `중복 ${dups}명`;
+    return unique;
+  }
+
+  function saveLS(){
+    try{ localStorage.setItem(LS_KEY, JSON.stringify({ text:namesEl.value, seed:seedEl.value, dedupe:dedupeEl.checked })); }catch(e){}
+  }
+
+  namesEl.addEventListener('input', ()=>{ parseNames(); saveLS(); });
+  dedupeEl.addEventListener('change', ()=>{ parseNames(); saveLS(); });
+  seedEl.addEventListener('input', saveLS);
+
+  // --- Shuffle & pick ---
+  function shuffleInPlace(a, rnd){ for(let i=a.length-1;i>0;i--){ const j = Math.floor(rnd()* (i+1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+  function draw(){
+    clearAlert();
+    const list = parseNames();
+    if(list.length < 16){
+      showAlert(`참가자가 ${list.length}명입니다. 최소 16명이 필요합니다.`, 'err');
+      renderTeams([]); renderBench([]); return;
+    }
+    const rnd = rngFromSeed(seedEl.value.trim());
+    const pool = list.slice();
+    shuffleInPlace(pool, rnd);
+    const selected = pool.slice(0, 16);
+    const bench = pool.slice(16);
+    renderTeams(selected);
+    renderBench(bench);
+    burstConfetti();
+  }
+
+  function reshuffle(){
+    const hasResult = teamsEl.children.length > 0;
+    if(!hasResult){ draw(); return; }
+    const current = collectCurrentMembers();
+    if(current.length !== 16){ draw(); return; }
+    const rnd = rngFromSeed(seedEl.value.trim());
+    shuffleInPlace(current, rnd);
+    renderTeams(current);
+    burstConfetti();
+  }
+
+  function collectCurrentMembers(){
+    const li = teamsEl.querySelectorAll('li');
+    return Array.from(li).map(x=>x.textContent.trim()).filter(Boolean);
+  }
+
+  function renderTeams(selected){
+    teamsEl.innerHTML = '';
+    if(selected.length === 0){ return; }
+    const teams = [ selected.slice(0,4), selected.slice(4,8), selected.slice(8,12), selected.slice(12,16) ];
+    teams.forEach((members, idx)=>{
+      const info = TEAM_INFO[idx];
+      const box = document.createElement('div'); box.className = 'team';
+      const head = document.createElement('div'); head.className = 'th';
+      head.innerHTML = `<h4><span class="emoji">${info.emoji}</span> ${info.key} 팀</h4><span class="muted small">${members.length}명</span>`;
+      const list = document.createElement('ol');
+      members.forEach(n=>{ const li = document.createElement('li'); li.textContent = n; list.appendChild(li); });
+      box.appendChild(head); box.appendChild(list); teamsEl.appendChild(box);
+    });
+  }
+
+  function renderBench(bench){
+    if(!bench || bench.length===0){ benchWrapEl.style.display='none'; benchEl.textContent=''; return; }
+    benchWrapEl.style.display='block';
+    $('#benchTitle').textContent = `미선발 명단 (${bench.length}명)`;
+    benchEl.textContent = bench.join(', ');
+  }
+
+  function toText(){
+    if(teamsEl.children.length===0) return '';
+    let out = `제15회 SNUPOOL배 이벤트게임 - 4:4 랜덤 판다리기\n`;
+    for(let i=0;i<4;i++){
+      const info = TEAM_INFO[i];
+      const items = teamsEl.children[i].querySelectorAll('li');
+      const names = Array.from(items).map(li=>li.textContent.trim());
+      out += `\n[${info.emoji} ${info.key}] ${names.join(', ')}`;
+    }
+    if(benchEl.textContent.trim()) out += `\n\n(미선발) ${benchEl.textContent.trim()}`;
+    return out;
+  }
+
+  function toCSV(){
+    const rows = [["Team","Member"]];
+    for(let i=0;i<4;i++){
+      const info = TEAM_INFO[i];
+      const items = teamsEl.children[i]?.querySelectorAll('li') || [];
+      Array.from(items).forEach(li=> rows.push([info.key, li.textContent.trim()]));
+    }
+    return rows.map(r=> r.map(s=> '"'+String(s).replace(/"/g,'""')+'"').join(',')).join('\n');
+  }
+
+  function copyResult(){
+    const txt = toText();
+    if(!txt){ showAlert('복사할 결과가 없습니다. 먼저 추첨을 진행하세요.','warn'); return; }
+    navigator.clipboard.writeText(txt).then(()=>{ showAlert('결과를 클립보드에 복사했어요. 원하는 곳에 붙여넣기 하세요.','ok'); });
+  }
+
+  function downloadCSV(){
+    if(teamsEl.children.length===0){ showAlert('다운로드할 결과가 없습니다. 먼저 추첨을 진행하세요.','warn'); return; }
+    const blob = new Blob(["\ufeff" + toCSV()], {type:'text/csv;charset=utf-8;'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'snupool_random_teams.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  function showAlert(msg, type='warn'){
+    alertEl.textContent = msg; alertEl.style.display='block';
+    alertEl.style.borderColor = type==='ok'? '#1e3b2d' : (type==='err'? '#3a2a2a' : '#3a2f1a');
+    alertEl.style.background = type==='ok'? '#0f1d18' : (type==='err'? '#1a1010' : '#181409');
+  }
+  function clearAlert(){ alertEl.style.display='none'; alertEl.textContent=''; }
+
+  function burstConfetti(){
+    const root = $('#confetti');
+    const EMO = ['🎉','🎊','✨','💫','🌟'];
+    for(let i=0;i<40;i++){
+      const s = document.createElement('span');
+      s.textContent = EMO[(Math.random()*EMO.length)|0];
+      s.style.left = (Math.random()*100)+'%';
+      s.style.animationDelay = (Math.random()*0.6)+'s';
+      s.style.fontSize = (12 + Math.random()*18)+'px';
+      root.appendChild(s);
+      setTimeout(()=> s.remove(), 2400);
+    }
+  }
+
+  // --- Events ---
+  $('#btnDraw').addEventListener('click', draw);
+  $('#btnShuffle').addEventListener('click', reshuffle);
+  $('#btnClear').addEventListener('click', ()=>{ namesEl.value=''; seedEl.value=''; saveLS(); parseNames(); teamsEl.innerHTML=''; benchEl.textContent=''; benchWrapEl.style.display='none'; clearAlert(); });
+  $('#btnCopy').addEventListener('click', copyResult);
+  $('#btnCSV').addEventListener('click', downloadCSV);
+  $('#btnSample').addEventListener('click', ()=>{
+    const demo = '홍길동, 김영희, 이철수, 박민수, 최수정, 오세훈, 유하늘, 문태양, 신별, 이빛나, 강지우, 장서윤, 노건우, 김도윤, 한지민, 윤예진, 조아라, 서한결, 표승현, 정채린, 오지후, 배하린';
+    namesEl.value = demo; saveLS(); parseNames();
+  });
+  document.addEventListener('keydown', (e)=>{ if((e.metaKey||e.ctrlKey) && e.key==='Enter'){ e.preventDefault(); draw(); } });
+
+  // Initial stats
+  parseNames();
+})();
+</script>
+</body>
+</html>
