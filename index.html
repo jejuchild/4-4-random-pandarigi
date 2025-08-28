@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>제15회 SNUPOOL배 대학부 수영대회 이벤트게임 · 4:4 랜덤 판다리기</title>
+  <meta name="description" content="참가자 명단을 넣으면 팀당 4명씩, 총 16명을 랜덤으로 추첨하여 물개/수달/돌고래/카피바라 팀으로 배정합니다. 모든 처리는 브라우저에서만 이뤄집니다." />
+  <style>
+    :root{
+      --bg:#0b0b10; --panel:#15151d; --muted:#9aa1af; --text:#f2f4f8; --brand:#60a5fa; --accent:#22d3ee;
+      --ok:#34d399; --warn:#fbbf24; --err:#f87171; --ring:rgba(96,165,250,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; background:linear-gradient(180deg,#0b0b10,#0f1016 40%,#0b0b10); color:var(--text);}
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 18px 80px}
+    header h1{margin:.2rem 0 0; font-size:clamp(1.4rem,4vw,2rem); letter-spacing:.2px}
+    header p{margin:.25rem 0 0; color:var(--muted)}
+    header .badge{display:inline-flex; gap:.5rem; align-items:center; margin-top:.6rem; padding:.25rem .6rem; border:1px solid #273045; background:#0f1423; border-radius:999px; font-size:.9rem; color:#c9d5ff}
+    .grid{display:grid; gap:18px; grid-template-columns:1.1fr .9fr}
+    @media(max-width:920px){ .grid{grid-template-columns:1fr} }
+
+    .card{background:linear-gradient(180deg,#13141c,#0f1016); border:1px solid #222536; border-radius:18px; box-shadow:0 6px 20px rgba(0,0,0,.35); overflow:hidden}
+    .card .head{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid #1e2232; background:radial-gradient(1200px 300px at -50% -100%, rgba(96,165,250,.12), transparent 50%) }
+    .card .head h3{margin:0; font-weight:700; font-size:1.05rem}
+    .card .body{padding:16px}
+
+    textarea{width:100%; min-height:220px; resize:vertical; padding:14px 14px 34px; border-radius:14px; border:1px solid #262b3d; outline:none; background:#0e111a; color:var(--text); line-height:1.5}
+    textarea:focus{border-color:#2d6eea; box-shadow:0 0 0 5px var(--ring)}
+    .row{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+    .hint{font-size:.9rem; color:var(--muted)}
+
+    .btn{appearance:none; border:1px solid #273045; background:linear-gradient(180deg,#1b2132,#111522); color:#e8eefc; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600; transition:.2s transform,.2s opacity,.2s border-color}
+    .btn:focus{outline:none; box-shadow:0 0 0 5px var(--ring)}
+    .btn:hover{transform:translateY(-1px); border-color:#334063}
+    .btn[disabled]{opacity:.5; cursor:not-allowed}
+    .btn.primary{border-color:#3b5ccc; background:linear-gradient(180deg,#3056c7,#2043a8)}
+    .btn.ghost{background:transparent}
+    .btn.success{background:linear-gradient(180deg,#16a34a,#15803d); border-color:#1a6b3d}
+
+    .opt{display:flex; gap:
