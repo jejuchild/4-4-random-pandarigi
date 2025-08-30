@@ -168,19 +168,23 @@
 
 <script>
 (function(){
+  "use strict";
   if (window.__SNUPOOL_444_INIT__) return;
   window.__SNUPOOL_444_INIT__ = true;
 
   function q(s, el){ return (el||document).querySelector(s); }
 
+  // 🔐 모든 특수문자/이모지는 유니코드 이스케이프 사용 (파서 오류 방지)
   var TEAM_INFO = [
-    {key:'물개', emoji:'🦭'},
-    {key:'수달', emoji:'🦦'},
-    {key:'돌고래', emoji:'🐬'},
-    {key:'카피바라', emoji:'🐹'}
+    {key:"물개", emoji:"🦭"}, // 🦭
+    {key:"수달", emoji:"🦦"}, // 🦦
+    {key:"돌고래", emoji:"🐬"}, // 🐬
+    {key:"카피바라", emoji:"🐹"}  // 🐹 (대체)
   ];
+  var EMO = ["🎉","🎊","✨","💫","🌟"]; // 🎉🎊✨💫🌟
+  var DICE = "🎲"; // 🎲
 
-  var LS_KEY = 'snupool_random_444_v_teamwise_v3';
+  var LS_KEY = 'snupool_random_444_v_teamwise_v4';
   var state = { participants: [], teams: [[],[],[],[]] };
 
   var teamsEl = q('#teams');
@@ -253,7 +257,7 @@
       var emo = document.createElement('span'); emo.textContent = info.emoji; emo.style.marginRight='12px';
       title.appendChild(emo); title.appendChild(document.createTextNode(info.key + ' 팀'));
       var right = document.createElement('div'); right.className='right';
-      var btn = document.createElement('button'); btn.className='btn teamDraw'; btn.setAttribute('data-team',''+idx); btn.textContent='🎲 1명 뽑기';
+      var btn = document.createElement('button'); btn.className='btn teamDraw'; btn.setAttribute('data-team',''+idx); btn.textContent= DICE + ' 1명 뽑기';
       var countEl = document.createElement('div'); countEl.className='count'; countEl.textContent = state.teams[idx].filter(Boolean).length + '/4';
       right.appendChild(btn); right.appendChild(countEl);
       head.appendChild(title); head.appendChild(right);
@@ -276,11 +280,11 @@
   }
 
   function animateDraw(list, title){
-    drawTitle.textContent = title || '추첨중…';
+    drawTitle.textContent = title || '추첨중...';
     drawStage.classList.add('show');
     var count=0;
     var id = setInterval(function(){
-      var name = list[rand(list.length)] || '—';
+      var name = list[rand(list.length)] || '-';
       ticker.innerHTML=''; var s=document.createElement('span'); s.textContent=name; ticker.appendChild(s);
       count++; if(count>=26){ clearInterval(id); }
     }, 80);
@@ -292,7 +296,7 @@
     var slot = nextEmptyIndex(tIdx); if(slot === -1){ showToast('이미 4명이 모두 배정되었습니다.'); return; }
     var pool = computePool(); if(pool.length === 0){ showToast('뽑을 인원이 없습니다.'); return; }
     var info = TEAM_INFO[tIdx];
-    await animateDraw(pool, info.emoji+' '+info.key+' 팀 추첨중…');
+    await animateDraw(pool, info.emoji + ' ' + info.key + ' 팀 추첨중...');
     var pick = pool[rand(pool.length)];
     state.teams[tIdx][slot] = pick;
     renderTeams();
@@ -304,7 +308,7 @@
     teamList.innerHTML='';
     for(var i=0;i<4;i++){
       var row = document.createElement('div'); row.className='bigrow'; row.setAttribute('data-pos',''+i); row.setAttribute('data-team',''+idx);
-      var left = document.createElement('div'); left.className='bigname'; left.textContent = state.teams[idx][i] || '— 빈 자리 —';
+      var left = document.createElement('div'); left.className='bigname'; left.textContent = state.teams[idx][i] || '- 빈 자리 -';
       var right = document.createElement('div'); right.className='actions';
       if(state.teams[idx][i]){
         var x = document.createElement('button'); x.className='xbtn'; x.textContent='✕ 제거'; x.addEventListener('click', (function(ti,pi){ return function(){ removeMember(ti,pi); };})(idx,i)); right.appendChild(x);
@@ -326,7 +330,7 @@
 
   function fillVacancy(tIdx, pos, btnEl){
     var pool = computePool(); if(pool.length===0){ showToast('뽑을 인원이 없습니다.'); return; }
-    var id = setInterval(function(){ btnEl.textContent = pool[rand(pool.length)] || '추첨 중…'; }, 80);
+    var id = setInterval(function(){ btnEl.textContent = (pool[rand(pool.length)] || '추첨 중...'); }, 80);
     btnEl.disabled = true;
     setTimeout(function(){
       clearInterval(id);
@@ -337,7 +341,7 @@
   }
 
   function burstConfetti(){
-    var root = q('#confetti'); var EMO=['🎉','🎊','✨','💫','🌟'];
+    var root = q('#confetti');
     for(var i=0;i<60;i++){
       var s=document.createElement('span'); s.textContent=EMO[rand(EMO.length)]; s.style.left=(Math.random()*100)+'%'; s.style.animationDelay=(Math.random()*0.6)+'s'; s.style.fontSize=(16+Math.random()*22)+'px'; root.appendChild(s); setTimeout((function(el){ return function(){ el.parentNode && el.parentNode.removeChild(el); };})(s),2400);
     }
