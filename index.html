@@ -14,80 +14,77 @@
     html,body{height:100%}
     body{margin:0; background:radial-gradient(1200px 600px at 10% -10%, #0f1730 0%, #0a0b12 45%, #090a11 100%); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size:clamp(18px,1.6vw,22px)}
 
-    .wrap{max-width:1400px; margin:0 auto; padding:22px 18px 80px}
+    .wrap{max-width:1500px; margin:0 auto; padding:22px 18px 80px}
 
     header{display:flex; align-items:center; gap:18px; flex-wrap:wrap}
     header .title{flex:1 1 auto}
-    h1{margin:.2rem 0 0; font-size:clamp(2rem,3.6vw,3rem)}
-    .sub{color:#c7d2fe; font-weight:700; letter-spacing:.2px; font-size:clamp(1rem,1.4vw,1.2rem)}
-    .toolbar{display:flex; gap:12px; flex-wrap:wrap}
+    h1{margin:.2rem 0 0; font-size:clamp(2.4rem,4vw,3.4rem)}
+    .sub{color:#c7d2fe; font-weight:800; letter-spacing:.2px; font-size:clamp(1.1rem,1.6vw,1.4rem)}
+    .toolbar{display:flex; gap:14px; flex-wrap:wrap}
 
-    .btn{appearance:none; border:1px solid #2a3557; background:linear-gradient(180deg,#1a2140,#121833); color:#eaf0ff; padding:12px 18px; border-radius:14px; cursor:pointer; font-weight:800; letter-spacing:.2px; transition:.18s transform,.18s opacity,.18s background; font-size:clamp(1rem,1.4vw,1.2rem)}
+    .btn{appearance:none; border:1px solid #2a3557; background:linear-gradient(180deg,#1a2140,#121833); color:#eaf0ff; padding:14px 20px; border-radius:16px; cursor:pointer; font-weight:900; letter-spacing:.2px; transition:.18s transform,.18s opacity,.18s background; font-size:clamp(1.2rem,1.6vw,1.4rem)}
     .btn:hover{transform:translateY(-1px)}
     .btn[disabled]{opacity:.6; cursor:not-allowed}
     .btn.primary{background:linear-gradient(180deg,#3157d3,#2345b3)}
     .btn.ghost{background:transparent}
     .btn.warn{background:linear-gradient(180deg,#8a5a09,#6a4307); border-color:#6a4307}
 
-    .card{border:1px solid #1f2745; background:linear-gradient(180deg,#131a34,#0f152b); border-radius:20px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,.35)}
-    .card .head{display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid #1b2342; background:radial-gradient(1200px 300px at -50% -80%, rgba(96,165,250,.12), transparent 60%)}
-    .card .head h3{margin:0; font-size:clamp(1.1rem,1.8vw,1.4rem)}
-    .card .body{padding:20px}
+    .card{border:1px solid #1f2745; background:linear-gradient(180deg,#131a34,#0f152b); border-radius:22px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    .card .head{display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid #1b2342; background:radial-gradient(1200px 300px at -50% -80%, rgba(96,165,250,.12), transparent 60%)}
+    .card .head h3{margin:0; font-size:clamp(1.4rem,2.2vw,1.8rem)}
+    .card .body{padding:22px}
 
-    .teams{display:grid; grid-template-columns:repeat(2,1fr); gap:18px}
+    .teams{display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
     @media(max-width:980px){ .teams{grid-template-columns:1fr} }
-    .team{border:1px solid #242c54; border-radius:18px; background:linear-gradient(180deg,#141a36,#12162d); cursor:pointer; transition:.2s transform,.2s border-color}
+    .team{border:1px solid #242c54; border-radius:20px; background:linear-gradient(180deg,#141a36,#12162d); cursor:pointer; transition:.2s transform,.2s border-color}
     .team:hover{transform:translateY(-2px); border-color:#334072}
-    .team .th{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px dashed #212a4e}
-    .team .th h4{margin:0; font-size:clamp(1.4rem,2.6vw,2rem)}
-    .team .count{color:#cbd5e1; font-size:clamp(1rem,1.6vw,1.2rem)}
-    .chips{display:flex; gap:10px; flex-wrap:wrap; padding:16px 18px}
-    .chip{border:1px solid #2a3557; background:#0e1430; padding:.45rem .75rem; border-radius:999px; font-size:clamp(1.2rem,1.9vw,1.6rem)}
+    .team .th{display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px dashed #212a4e}
+    .team .th h4{margin:0; font-size:clamp(2rem,3vw,2.4rem)}
+    .team .count{color:#cbd5e1; font-size:clamp(1.1rem,1.8vw,1.4rem)}
+    .chips{display:flex; gap:12px; flex-wrap:wrap; padding:18px 20px}
+    .chip{border:1px solid #2a3557; background:#0e1430; padding:.55rem .9rem; border-radius:999px; font-size:clamp(1.6rem,2.6vw,2.2rem)}
     .emptyChip{opacity:.6}
 
-    .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:28px; background:#10213a; border:1px solid #274165; padding:12px 16px; border-radius:12px; color:#dbeafe; z-index:60; box-shadow:0 8px 24px rgba(0,0,0,.35); display:none; font-size:clamp(1rem,1.4vw,1.2rem)}
+    .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:28px; background:#10213a; border:1px solid #274165; padding:12px 16px; border-radius:12px; color:#dbeafe; z-index:60; box-shadow:0 8px 24px rgba(0,0,0,.35); display:none; font-size:clamp(1rem,1.6vw,1.3rem)}
 
     /* --- Modals (input/team/draw) --- */
     .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:50}
     .modal.show{display:flex}
     .backdrop{position:absolute; inset:0; background:rgba(5,8,20,.7); backdrop-filter:blur(2px)}
-    .sheet{position:relative; width:min(920px,92vw); max-height:88vh; overflow:auto; border-radius:20px; border:1px solid #2a335a; background:linear-gradient(180deg,#121734,#0c1129); box-shadow:0 20px 80px rgba(0,0,0,.55)}
+    .sheet{position:relative; width:min(1100px,92vw); max-height:88vh; overflow:auto; border-radius:22px; border:1px solid #2a335a; background:linear-gradient(180deg,#121734,#0c1129); box-shadow:0 20px 80px rgba(0,0,0,.55)}
 
     /* Input modal */
-    .sheet .hd{display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid #1c2446}
-    .sheet .hd h3{margin:0; font-size:clamp(1.2rem,1.8vw,1.6rem)}
-    .sheet .bd{padding:18px 20px}
-    textarea{width:100%; min-height:300px; resize:vertical; padding:16px; border-radius:14px; border:1px solid #273055; background:#0d1330; color:var(--text); line-height:1.55; font-size:clamp(1.1rem,1.6vw,1.4rem)}
+    .sheet .hd{display:flex; align-items:center; justify-content:space-between; padding:20px 22px; border-bottom:1px solid #1c2446}
+    .sheet .hd h3{margin:0; font-size:clamp(1.6rem,2.4vw,2rem)}
+    .sheet .bd{padding:20px 22px}
+    textarea{width:100%; min-height:360px; resize:vertical; padding:18px; border-radius:16px; border:1px solid #273055; background:#0d1330; color:var(--text); line-height:1.55; font-size:clamp(1.4rem,2vw,1.6rem)}
     textarea:focus{outline:none; box-shadow:0 0 0 4px var(--ring)}
 
     /* Team modal */
-    .biglist{padding:22px}
-    .biglist h2{margin:.3rem 0 12px; font-size:clamp(1.8rem,3.6vw,2.6rem)}
-    .bigrow{display:flex; align-items:center; justify-content:space-between; gap:16px; border:1px solid #263161; background:linear-gradient(180deg,#141b3f,#10163a); border-radius:16px; padding:20px; margin:14px 0}
-    .bigname{font-size:clamp(2.2rem,5vw,4rem); font-weight:900; letter-spacing:.3px}
-    .bigrow .actions{display:flex; gap:10px; align-items:center}
-    .xbtn{appearance:none; border:1px solid #3a2540; background:linear-gradient(180deg,#401a25,#2a1016); color:#ffd7d7; padding:.6rem .9rem; border-radius:12px; cursor:pointer; font-weight:900; font-size:clamp(1rem,1.4vw,1.2rem)}
-    .fillbtn{appearance:none; border:1px solid #244a3a; background:linear-gradient(180deg,#135f43,#0e4a34); color:#d1fae5; padding:.7rem 1rem; border-radius:12px; cursor:pointer; font-weight:900; font-size:clamp(1rem,1.4vw,1.2rem)}
+    .biglist{padding:24px}
+    .bigrow{display:flex; align-items:center; justify-content:space-between; gap:18px; border:1px solid #263161; background:linear-gradient(180deg,#141b3f,#10163a); border-radius:18px; padding:22px; margin:14px 0}
+    .bigname{font-size:clamp(3rem,7vw,6rem); font-weight:900; letter-spacing:.3px}
+    .bigrow .actions{display:flex; gap:12px; align-items:center}
+    .xbtn{appearance:none; border:1px solid #3a2540; background:linear-gradient(180deg,#401a25,#2a1016); color:#ffd7d7; padding:.7rem 1rem; border-radius:14px; cursor:pointer; font-weight:900; font-size:clamp(1.2rem,1.6vw,1.4rem)}
+    .fillbtn{appearance:none; border:1px solid #244a3a; background:linear-gradient(180deg,#135f43,#0e4a34); color:#d1fae5; padding:.8rem 1.1rem; border-radius:14px; cursor:pointer; font-weight:900; font-size:clamp(1.2rem,1.6vw,1.4rem)}
 
     /* Draw overlay */
     .drawStage{position:fixed; inset:0; display:none; place-items:center; background:radial-gradient(1000px 400px at 50% -10%, rgba(34,211,238,.12), transparent 50%), radial-gradient(1200px 500px at 20% 120%, rgba(96,165,250,.15), transparent 60%), #070a14; z-index:70}
     .drawStage.show{display:grid}
     .drawInner{text-align:center}
-    .drawTitle{font-size:clamp(2rem,3.8vw,3rem); margin:0 0 16px}
-    .ticker{font-size:clamp(3rem,8vw,6rem); font-weight:900; letter-spacing:.6px}
+    .drawTitle{font-size:clamp(2.2rem,4vw,3.2rem); margin:0 0 18px}
+    .ticker{font-size:clamp(3.8rem,9vw,7rem); font-weight:900; letter-spacing:.6px}
     .ticker span{display:inline-block; animation:pop .15s ease}
     @keyframes pop{0%{transform:scale(1)} 50%{transform:scale(1.06)} 100%{transform:scale(1)}}
 
     .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden}
     .confetti span{position:absolute; top:-10px; font-size:16px; animation:drop 2.2s linear forwards; opacity:.95}
     @keyframes drop{to{transform:translateY(105vh) rotate(540deg); opacity:.9}}
-
-    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; border:1px solid #2a2f45; background:#101428; padding:.08rem .4rem; border-radius:6px}
   </style>
 </head>
 <body>
   <div class="confetti" id="confetti" aria-hidden="true"></div>
-  <div class="wrap">
+  <div class="wrap" id="appRoot">
     <header>
       <div class="title">
         <div class="sub">제15회 SNUPOOL배 대학부 수영대회 · 이벤트 게임</div>
@@ -131,7 +128,7 @@
   <!-- 팀 상세 모달 -->
   <div class="modal" id="teamModal" role="dialog" aria-modal="true">
     <div class="backdrop" data-close="team"></div>
-    <div class="sheet" role="document" style="width:min(1100px,94vw)">
+    <div class="sheet" role="document" style="width:min(1200px,94vw)">
       <div class="hd">
         <h3 id="teamTitle">팀 상세</h3>
         <div>
@@ -152,6 +149,16 @@
 
 <script>
 (function(){
+  // ---- Safety: 중복 렌더링 방지(깃허브 페이지/테마 중첩 등) ----
+  (function dedupe(){
+    const wraps = document.querySelectorAll('body > .wrap');
+    for(let i=1;i<wraps.length;i++){ wraps[i].remove(); }
+    ['confetti','drawStage','inputModal','teamModal'].forEach(id=>{
+      const els = document.querySelectorAll('#'+id);
+      for(let i=1;i<els.length;i++){ els[i].remove(); }
+    });
+  })();
+
   const $ = (s,el=document)=> el.querySelector(s);
   const $$ = (s,el=document)=> Array.from(el.querySelectorAll(s));
 
@@ -162,7 +169,7 @@
     {key:'카피바라', emoji:'🐹'}, // 대체 이모지
   ];
 
-  const LS_KEY = 'snupool_random_444_v3';
+  const LS_KEY = 'snupool_random_444_v4';
 
   // State
   const state = {
@@ -172,16 +179,14 @@
     drawn:false
   };
 
-  // Elements
+  // Elements (단일 인스턴스 보장)
   const teamsEl = $('#teams');
   const toastEl = $('#toast');
-
   const inputModal = $('#inputModal');
   const namesEl = $('#names');
   const teamModal = $('#teamModal');
   const teamTitle = $('#teamTitle');
   const teamList = $('#teamList');
-
   const drawStage = $('#drawStage');
   const ticker = $('#ticker');
 
@@ -212,7 +217,7 @@
       const box = document.createElement('div'); box.className='team'; box.dataset.idx = idx;
       const head = document.createElement('div'); head.className='th';
       const count = state.teams[idx].filter(Boolean).length;
-      head.innerHTML = `<h4><span style="margin-right:10px">${info.emoji}</span>${info.key} 팀</h4><div class="count">${count}/4</div>`;
+      head.innerHTML = `<h4><span style="margin-right:12px">${info.emoji}</span>${info.key} 팀</h4><div class="count">${count}/4</div>`;
       const chips = document.createElement('div'); chips.className='chips';
       for(let i=0;i<4;i++){
         const name = state.teams[idx][i];
@@ -273,7 +278,6 @@
       clearInterval(id);
       const pickIdx = (Math.random()*pool.length)|0;
       const pick = pool[pickIdx];
-      // remove from bench if existed
       const bi = state.bench.indexOf(pick); if(bi>-1) state.bench.splice(bi,1);
       state.teams[tIdx][pos] = pick;
       renderTeams();
@@ -287,13 +291,13 @@
     const uniq = parseNames();
     if(uniq.length < 16){ showToast('최소 16명이 필요합니다. 참가자를 더 입력하세요.'); openInput(); return; }
     state.participants = uniq.slice();
-    drawStage.classList.add('show');
+    drawStage.className = 'drawStage show';
     runTicker(uniq);
     setTimeout(()=> finalizeDraw(), 2600);
   }
 
   function finalizeDraw(){
-    drawStage.classList.remove('show');
+    drawStage.className = 'drawStage';
     const pool = shuffle(state.participants.slice());
     const selected = pool.slice(0,16);
     state.bench = pool.slice(16);
@@ -341,31 +345,23 @@
   function openInput(){ inputModal.classList.add('show'); }
   function closeInput(){ inputModal.classList.remove('show'); }
 
-  // Events
-  $('#btnOpenInput').addEventListener('click', openInput);
-  $('#btnCloseInput').addEventListener('click', closeInput);
-  $('[data-close="input"]').addEventListener('click', closeInput);
-  $('#btnSaveNames').addEventListener('click', ()=>{ saveLS(); const u = parseNames(); showToast(`${u.length}명 저장됨`); renderTeams(); });
-  namesEl.addEventListener('input', saveLS);
-
-  // Team modal close
-  $('#btnCloseTeam').addEventListener('click', closeTeam);
-  $('[data-close="team"]').addEventListener('click', closeTeam);
-
-  // Draw buttons
-  $('#btnStartDraw').addEventListener('click', startDraw);
-  $('#btnRedraw').addEventListener('click', resetDraw);
-
-  // Fullscreen
-  $('#btnFullscreen').addEventListener('click', async()=>{
-    try{
-      if(!document.fullscreenElement){ await document.documentElement.requestFullscreen(); }
-      else{ await document.exitFullscreen(); }
-    }catch(e){ showToast('브라우저가 전체화면을 허용하지 않았습니다. F11 키를 사용하세요.'); }
+  // --- Event delegation (중복 DOM에도 안전) ---
+  document.addEventListener('click', (e)=>{
+    const t = e.target.closest('button'); if(!t) return;
+    if(t.id==='btnOpenInput') openInput();
+    else if(t.id==='btnCloseInput') closeInput();
+    else if(t.id==='btnSaveNames'){ saveLS(); const u=parseNames(); showToast(`${u.length}명 저장됨`); renderTeams(); }
+    else if(t.id==='btnCloseTeam') closeTeam();
+    else if(t.id==='btnStartDraw') startDraw();
+    else if(t.id==='btnRedraw') resetDraw();
+    else if(t.id==='btnFullscreen') (async()=>{ try{ if(!document.fullscreenElement){ await document.documentElement.requestFullscreen(); } else { await document.exitFullscreen(); } }catch(e){ showToast('브라우저가 전체화면을 허용하지 않았습니다. F11 키를 사용하세요.'); } })();
   });
 
   // Initial
   loadLS();
+  drawStage.className = 'drawStage';
+  inputModal.classList.remove('show');
+  teamModal.classList.remove('show');
   renderTeams();
 })();
 </script>
@@ -387,80 +383,77 @@
     html,body{height:100%}
     body{margin:0; background:radial-gradient(1200px 600px at 10% -10%, #0f1730 0%, #0a0b12 45%, #090a11 100%); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size:clamp(18px,1.6vw,22px)}
 
-    .wrap{max-width:1400px; margin:0 auto; padding:22px 18px 80px}
+    .wrap{max-width:1500px; margin:0 auto; padding:22px 18px 80px}
 
     header{display:flex; align-items:center; gap:18px; flex-wrap:wrap}
     header .title{flex:1 1 auto}
-    h1{margin:.2rem 0 0; font-size:clamp(2rem,3.6vw,3rem)}
-    .sub{color:#c7d2fe; font-weight:700; letter-spacing:.2px; font-size:clamp(1rem,1.4vw,1.2rem)}
-    .toolbar{display:flex; gap:12px; flex-wrap:wrap}
+    h1{margin:.2rem 0 0; font-size:clamp(2.4rem,4vw,3.4rem)}
+    .sub{color:#c7d2fe; font-weight:800; letter-spacing:.2px; font-size:clamp(1.1rem,1.6vw,1.4rem)}
+    .toolbar{display:flex; gap:14px; flex-wrap:wrap}
 
-    .btn{appearance:none; border:1px solid #2a3557; background:linear-gradient(180deg,#1a2140,#121833); color:#eaf0ff; padding:12px 18px; border-radius:14px; cursor:pointer; font-weight:800; letter-spacing:.2px; transition:.18s transform,.18s opacity,.18s background; font-size:clamp(1rem,1.4vw,1.2rem)}
+    .btn{appearance:none; border:1px solid #2a3557; background:linear-gradient(180deg,#1a2140,#121833); color:#eaf0ff; padding:14px 20px; border-radius:16px; cursor:pointer; font-weight:900; letter-spacing:.2px; transition:.18s transform,.18s opacity,.18s background; font-size:clamp(1.2rem,1.6vw,1.4rem)}
     .btn:hover{transform:translateY(-1px)}
     .btn[disabled]{opacity:.6; cursor:not-allowed}
     .btn.primary{background:linear-gradient(180deg,#3157d3,#2345b3)}
     .btn.ghost{background:transparent}
     .btn.warn{background:linear-gradient(180deg,#8a5a09,#6a4307); border-color:#6a4307}
 
-    .card{border:1px solid #1f2745; background:linear-gradient(180deg,#131a34,#0f152b); border-radius:20px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,.35)}
-    .card .head{display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid #1b2342; background:radial-gradient(1200px 300px at -50% -80%, rgba(96,165,250,.12), transparent 60%)}
-    .card .head h3{margin:0; font-size:clamp(1.1rem,1.8vw,1.4rem)}
-    .card .body{padding:20px}
+    .card{border:1px solid #1f2745; background:linear-gradient(180deg,#131a34,#0f152b); border-radius:22px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    .card .head{display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid #1b2342; background:radial-gradient(1200px 300px at -50% -80%, rgba(96,165,250,.12), transparent 60%)}
+    .card .head h3{margin:0; font-size:clamp(1.4rem,2.2vw,1.8rem)}
+    .card .body{padding:22px}
 
-    .teams{display:grid; grid-template-columns:repeat(2,1fr); gap:18px}
+    .teams{display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
     @media(max-width:980px){ .teams{grid-template-columns:1fr} }
-    .team{border:1px solid #242c54; border-radius:18px; background:linear-gradient(180deg,#141a36,#12162d); cursor:pointer; transition:.2s transform,.2s border-color}
+    .team{border:1px solid #242c54; border-radius:20px; background:linear-gradient(180deg,#141a36,#12162d); cursor:pointer; transition:.2s transform,.2s border-color}
     .team:hover{transform:translateY(-2px); border-color:#334072}
-    .team .th{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px dashed #212a4e}
-    .team .th h4{margin:0; font-size:clamp(1.4rem,2.6vw,2rem)}
-    .team .count{color:#cbd5e1; font-size:clamp(1rem,1.6vw,1.2rem)}
-    .chips{display:flex; gap:10px; flex-wrap:wrap; padding:16px 18px}
-    .chip{border:1px solid #2a3557; background:#0e1430; padding:.45rem .75rem; border-radius:999px; font-size:clamp(1.2rem,1.9vw,1.6rem)}
+    .team .th{display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px dashed #212a4e}
+    .team .th h4{margin:0; font-size:clamp(2rem,3vw,2.4rem)}
+    .team .count{color:#cbd5e1; font-size:clamp(1.1rem,1.8vw,1.4rem)}
+    .chips{display:flex; gap:12px; flex-wrap:wrap; padding:18px 20px}
+    .chip{border:1px solid #2a3557; background:#0e1430; padding:.55rem .9rem; border-radius:999px; font-size:clamp(1.6rem,2.6vw,2.2rem)}
     .emptyChip{opacity:.6}
 
-    .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:28px; background:#10213a; border:1px solid #274165; padding:12px 16px; border-radius:12px; color:#dbeafe; z-index:60; box-shadow:0 8px 24px rgba(0,0,0,.35); display:none; font-size:clamp(1rem,1.4vw,1.2rem)}
+    .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:28px; background:#10213a; border:1px solid #274165; padding:12px 16px; border-radius:12px; color:#dbeafe; z-index:60; box-shadow:0 8px 24px rgba(0,0,0,.35); display:none; font-size:clamp(1rem,1.6vw,1.3rem)}
 
     /* --- Modals (input/team/draw) --- */
     .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:50}
     .modal.show{display:flex}
     .backdrop{position:absolute; inset:0; background:rgba(5,8,20,.7); backdrop-filter:blur(2px)}
-    .sheet{position:relative; width:min(920px,92vw); max-height:88vh; overflow:auto; border-radius:20px; border:1px solid #2a335a; background:linear-gradient(180deg,#121734,#0c1129); box-shadow:0 20px 80px rgba(0,0,0,.55)}
+    .sheet{position:relative; width:min(1100px,92vw); max-height:88vh; overflow:auto; border-radius:22px; border:1px solid #2a335a; background:linear-gradient(180deg,#121734,#0c1129); box-shadow:0 20px 80px rgba(0,0,0,.55)}
 
     /* Input modal */
-    .sheet .hd{display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid #1c2446}
-    .sheet .hd h3{margin:0; font-size:clamp(1.2rem,1.8vw,1.6rem)}
-    .sheet .bd{padding:18px 20px}
-    textarea{width:100%; min-height:300px; resize:vertical; padding:16px; border-radius:14px; border:1px solid #273055; background:#0d1330; color:var(--text); line-height:1.55; font-size:clamp(1.1rem,1.6vw,1.4rem)}
+    .sheet .hd{display:flex; align-items:center; justify-content:space-between; padding:20px 22px; border-bottom:1px solid #1c2446}
+    .sheet .hd h3{margin:0; font-size:clamp(1.6rem,2.4vw,2rem)}
+    .sheet .bd{padding:20px 22px}
+    textarea{width:100%; min-height:360px; resize:vertical; padding:18px; border-radius:16px; border:1px solid #273055; background:#0d1330; color:var(--text); line-height:1.55; font-size:clamp(1.4rem,2vw,1.6rem)}
     textarea:focus{outline:none; box-shadow:0 0 0 4px var(--ring)}
 
     /* Team modal */
-    .biglist{padding:22px}
-    .biglist h2{margin:.3rem 0 12px; font-size:clamp(1.8rem,3.6vw,2.6rem)}
-    .bigrow{display:flex; align-items:center; justify-content:space-between; gap:16px; border:1px solid #263161; background:linear-gradient(180deg,#141b3f,#10163a); border-radius:16px; padding:20px; margin:14px 0}
-    .bigname{font-size:clamp(2.2rem,5vw,4rem); font-weight:900; letter-spacing:.3px}
-    .bigrow .actions{display:flex; gap:10px; align-items:center}
-    .xbtn{appearance:none; border:1px solid #3a2540; background:linear-gradient(180deg,#401a25,#2a1016); color:#ffd7d7; padding:.6rem .9rem; border-radius:12px; cursor:pointer; font-weight:900; font-size:clamp(1rem,1.4vw,1.2rem)}
-    .fillbtn{appearance:none; border:1px solid #244a3a; background:linear-gradient(180deg,#135f43,#0e4a34); color:#d1fae5; padding:.7rem 1rem; border-radius:12px; cursor:pointer; font-weight:900; font-size:clamp(1rem,1.4vw,1.2rem)}
+    .biglist{padding:24px}
+    .bigrow{display:flex; align-items:center; justify-content:space-between; gap:18px; border:1px solid #263161; background:linear-gradient(180deg,#141b3f,#10163a); border-radius:18px; padding:22px; margin:14px 0}
+    .bigname{font-size:clamp(3rem,7vw,6rem); font-weight:900; letter-spacing:.3px}
+    .bigrow .actions{display:flex; gap:12px; align-items:center}
+    .xbtn{appearance:none; border:1px solid #3a2540; background:linear-gradient(180deg,#401a25,#2a1016); color:#ffd7d7; padding:.7rem 1rem; border-radius:14px; cursor:pointer; font-weight:900; font-size:clamp(1.2rem,1.6vw,1.4rem)}
+    .fillbtn{appearance:none; border:1px solid #244a3a; background:linear-gradient(180deg,#135f43,#0e4a34); color:#d1fae5; padding:.8rem 1.1rem; border-radius:14px; cursor:pointer; font-weight:900; font-size:clamp(1.2rem,1.6vw,1.4rem)}
 
     /* Draw overlay */
     .drawStage{position:fixed; inset:0; display:none; place-items:center; background:radial-gradient(1000px 400px at 50% -10%, rgba(34,211,238,.12), transparent 50%), radial-gradient(1200px 500px at 20% 120%, rgba(96,165,250,.15), transparent 60%), #070a14; z-index:70}
     .drawStage.show{display:grid}
     .drawInner{text-align:center}
-    .drawTitle{font-size:clamp(2rem,3.8vw,3rem); margin:0 0 16px}
-    .ticker{font-size:clamp(3rem,8vw,6rem); font-weight:900; letter-spacing:.6px}
+    .drawTitle{font-size:clamp(2.2rem,4vw,3.2rem); margin:0 0 18px}
+    .ticker{font-size:clamp(3.8rem,9vw,7rem); font-weight:900; letter-spacing:.6px}
     .ticker span{display:inline-block; animation:pop .15s ease}
     @keyframes pop{0%{transform:scale(1)} 50%{transform:scale(1.06)} 100%{transform:scale(1)}}
 
     .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden}
     .confetti span{position:absolute; top:-10px; font-size:16px; animation:drop 2.2s linear forwards; opacity:.95}
     @keyframes drop{to{transform:translateY(105vh) rotate(540deg); opacity:.9}}
-
-    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; border:1px solid #2a2f45; background:#101428; padding:.08rem .4rem; border-radius:6px}
   </style>
 </head>
 <body>
   <div class="confetti" id="confetti" aria-hidden="true"></div>
-  <div class="wrap">
+  <div class="wrap" id="appRoot">
     <header>
       <div class="title">
         <div class="sub">제15회 SNUPOOL배 대학부 수영대회 · 이벤트 게임</div>
@@ -504,7 +497,7 @@
   <!-- 팀 상세 모달 -->
   <div class="modal" id="teamModal" role="dialog" aria-modal="true">
     <div class="backdrop" data-close="team"></div>
-    <div class="sheet" role="document" style="width:min(1100px,94vw)">
+    <div class="sheet" role="document" style="width:min(1200px,94vw)">
       <div class="hd">
         <h3 id="teamTitle">팀 상세</h3>
         <div>
@@ -525,6 +518,16 @@
 
 <script>
 (function(){
+  // ---- Safety: 중복 렌더링 방지(깃허브 페이지/테마 중첩 등) ----
+  (function dedupe(){
+    const wraps = document.querySelectorAll('body > .wrap');
+    for(let i=1;i<wraps.length;i++){ wraps[i].remove(); }
+    ['confetti','drawStage','inputModal','teamModal'].forEach(id=>{
+      const els = document.querySelectorAll('#'+id);
+      for(let i=1;i<els.length;i++){ els[i].remove(); }
+    });
+  })();
+
   const $ = (s,el=document)=> el.querySelector(s);
   const $$ = (s,el=document)=> Array.from(el.querySelectorAll(s));
 
@@ -535,7 +538,7 @@
     {key:'카피바라', emoji:'🐹'}, // 대체 이모지
   ];
 
-  const LS_KEY = 'snupool_random_444_v3';
+  const LS_KEY = 'snupool_random_444_v4';
 
   // State
   const state = {
@@ -545,16 +548,14 @@
     drawn:false
   };
 
-  // Elements
+  // Elements (단일 인스턴스 보장)
   const teamsEl = $('#teams');
   const toastEl = $('#toast');
-
   const inputModal = $('#inputModal');
   const namesEl = $('#names');
   const teamModal = $('#teamModal');
   const teamTitle = $('#teamTitle');
   const teamList = $('#teamList');
-
   const drawStage = $('#drawStage');
   const ticker = $('#ticker');
 
@@ -585,7 +586,7 @@
       const box = document.createElement('div'); box.className='team'; box.dataset.idx = idx;
       const head = document.createElement('div'); head.className='th';
       const count = state.teams[idx].filter(Boolean).length;
-      head.innerHTML = `<h4><span style="margin-right:10px">${info.emoji}</span>${info.key} 팀</h4><div class="count">${count}/4</div>`;
+      head.innerHTML = `<h4><span style="margin-right:12px">${info.emoji}</span>${info.key} 팀</h4><div class="count">${count}/4</div>`;
       const chips = document.createElement('div'); chips.className='chips';
       for(let i=0;i<4;i++){
         const name = state.teams[idx][i];
@@ -646,7 +647,6 @@
       clearInterval(id);
       const pickIdx = (Math.random()*pool.length)|0;
       const pick = pool[pickIdx];
-      // remove from bench if existed
       const bi = state.bench.indexOf(pick); if(bi>-1) state.bench.splice(bi,1);
       state.teams[tIdx][pos] = pick;
       renderTeams();
@@ -660,13 +660,13 @@
     const uniq = parseNames();
     if(uniq.length < 16){ showToast('최소 16명이 필요합니다. 참가자를 더 입력하세요.'); openInput(); return; }
     state.participants = uniq.slice();
-    drawStage.classList.add('show');
+    drawStage.className = 'drawStage show';
     runTicker(uniq);
     setTimeout(()=> finalizeDraw(), 2600);
   }
 
   function finalizeDraw(){
-    drawStage.classList.remove('show');
+    drawStage.className = 'drawStage';
     const pool = shuffle(state.participants.slice());
     const selected = pool.slice(0,16);
     state.bench = pool.slice(16);
@@ -714,31 +714,23 @@
   function openInput(){ inputModal.classList.add('show'); }
   function closeInput(){ inputModal.classList.remove('show'); }
 
-  // Events
-  $('#btnOpenInput').addEventListener('click', openInput);
-  $('#btnCloseInput').addEventListener('click', closeInput);
-  $('[data-close="input"]').addEventListener('click', closeInput);
-  $('#btnSaveNames').addEventListener('click', ()=>{ saveLS(); const u = parseNames(); showToast(`${u.length}명 저장됨`); renderTeams(); });
-  namesEl.addEventListener('input', saveLS);
-
-  // Team modal close
-  $('#btnCloseTeam').addEventListener('click', closeTeam);
-  $('[data-close="team"]').addEventListener('click', closeTeam);
-
-  // Draw buttons
-  $('#btnStartDraw').addEventListener('click', startDraw);
-  $('#btnRedraw').addEventListener('click', resetDraw);
-
-  // Fullscreen
-  $('#btnFullscreen').addEventListener('click', async()=>{
-    try{
-      if(!document.fullscreenElement){ await document.documentElement.requestFullscreen(); }
-      else{ await document.exitFullscreen(); }
-    }catch(e){ showToast('브라우저가 전체화면을 허용하지 않았습니다. F11 키를 사용하세요.'); }
+  // --- Event delegation (중복 DOM에도 안전) ---
+  document.addEventListener('click', (e)=>{
+    const t = e.target.closest('button'); if(!t) return;
+    if(t.id==='btnOpenInput') openInput();
+    else if(t.id==='btnCloseInput') closeInput();
+    else if(t.id==='btnSaveNames'){ saveLS(); const u=parseNames(); showToast(`${u.length}명 저장됨`); renderTeams(); }
+    else if(t.id==='btnCloseTeam') closeTeam();
+    else if(t.id==='btnStartDraw') startDraw();
+    else if(t.id==='btnRedraw') resetDraw();
+    else if(t.id==='btnFullscreen') (async()=>{ try{ if(!document.fullscreenElement){ await document.documentElement.requestFullscreen(); } else { await document.exitFullscreen(); } }catch(e){ showToast('브라우저가 전체화면을 허용하지 않았습니다. F11 키를 사용하세요.'); } })();
   });
 
   // Initial
   loadLS();
+  drawStage.className = 'drawStage';
+  inputModal.classList.remove('show');
+  teamModal.classList.remove('show');
   renderTeams();
 })();
 </script>
