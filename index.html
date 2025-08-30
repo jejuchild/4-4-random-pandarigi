@@ -191,15 +191,67 @@
       var chips=document.createElement('div'); chips.className='chips'; for(var i=0;i<4;i++){ var name=state.teams[idx][i]; var sp=document.createElement('span'); sp.className='chip'+(name?'':' emptyChip'); sp.textContent=name||I('empty','빈 자리'); chips.appendChild(sp);} box.appendChild(head); box.appendChild(chips);
       box.addEventListener('click', function(e){ var t=e.target; while(t && t.tagName!=='BUTTON') t=t.parentElement; if(t && t.classList && t.classList.contains('teamDraw')) return; var i=parseInt(this.getAttribute('data-idx'),10); openTeam(i); }); teamsEl.appendChild(box);} if(statBench) statBench.textContent=I('bench','미선발')+' '+computePool().length+'명'; }
 
-  function animateDraw(list, title, done){ drawTitle.textContent=title||I('drawing','Drawing...'); drawStage.classList.add('show'); var count=0; var id=setInterval(function(){ var name=list.length? list[r(list.length)] : '-'; ticker.innerHTML=''; var s=document.createElement('span'); s.textContent=name; ticker.appendChild(s); count++; if(count>=26){ clearInterval(id);} },80); setTimeout(function(){ drawStage.classList.remove('show'); if(done) done(); },2200); }
+  function animateDraw(list, title){
+    drawTitle.textContent = title || I('drawing','Drawing...');
+    drawStage.classList.add('show');
+    var cycles = 26; // total ticks
+    var i = 0;
+    var final = list.length ? list[r(list.length)] : '-';
+    return new Promise(function(resolve){
+      var id = setInterval(function(){
+        var name;
+        if (i < cycles - 1) {
+          name = list.length ? list[r(list.length)] : '-';
+        } else {
+          name = final; // last tick shows the final pick
+        }
+        ticker.innerHTML = '';
+        var s = document.createElement('span'); s.textContent = name; ticker.appendChild(s);
+        i++;
+        if (i >= cycles) {
+          clearInterval(id);
+          setTimeout(function(){
+            drawStage.classList.remove('show');
+            resolve(final);
+          }, 200);
+        }
+      }, 80);
+    });
+  } },80); setTimeout(function(){ drawStage.classList.remove('show'); if(done) done(); },2200); }
 
-  function drawOneForTeam(tIdx){ if(state.participants.length===0){ showToast(I('need-input','먼저 참가자를 입력하세요.')); openInput(); return; } var slot=nextEmptyIndex(tIdx); if(slot===-1){ showToast(I('full','이미 4명이 모두 배정되었습니다.')); return; } var pool=computePool(); if(pool.length===0){ showToast(I('none','뽑을 인원이 없습니다.')); return; } var title=TEAM_INFO[tIdx].emoji+' '+TEAM_INFO[tIdx].key+' '+I('drawing','팀 추첨중...'); animateDraw(pool,title,function(){ var pick=pool[r(pool.length)]; state.teams[tIdx][slot]=pick; renderTeams(); burst(); }); }
+  function drawOneForTeam(tIdx){
+    if(state.participants.length===0){ showToast(I('need-input','먼저 참가자를 입력하세요.')); openInput(); return; }
+    var slot=nextEmptyIndex(tIdx); if(slot===-1){ showToast(I('full','이미 4명이 모두 배정되었습니다.')); return; }
+    var pool=computePool(); if(pool.length===0){ showToast(I('none','뽑을 인원이 없습니다.')); return; }
+    var title=TEAM_INFO[tIdx].emoji+' '+TEAM_INFO[tIdx].key+' '+I('drawing','팀 추첨중...');
+    animateDraw(pool, title).then(function(finalPick){
+      state.teams[tIdx][slot] = finalPick;
+      renderTeams();
+      burst();
+    });
+  } var slot=nextEmptyIndex(tIdx); if(slot===-1){ showToast(I('full','이미 4명이 모두 배정되었습니다.')); return; } var pool=computePool(); if(pool.length===0){ showToast(I('none','뽑을 인원이 없습니다.')); return; } var title=TEAM_INFO[tIdx].emoji+' '+TEAM_INFO[tIdx].key+' '+I('drawing','팀 추첨중...'); animateDraw(pool,title,function(){ var pick=pool[r(pool.length)]; state.teams[tIdx][slot]=pick; renderTeams(); burst(); }); }
 
   function openTeam(idx){ teamTitle.textContent=TEAM_INFO[idx].emoji+' '+TEAM_INFO[idx].key+' '+I('team','팀'); teamList.innerHTML=''; for(var i=0;i<4;i++){ var row=document.createElement('div'); row.className='bigrow'; row.setAttribute('data-pos',''+i); row.setAttribute('data-team',''+idx); var left=document.createElement('div'); left.className='bigname'; left.textContent=state.teams[idx][i]||'- '+I('empty','빈 자리')+' -'; var right=document.createElement('div'); right.className='actions'; if(state.teams[idx][i]){ var x=document.createElement('button'); x.className='xbtn'; x.textContent='X '+I('removed','제거됨'); x.addEventListener('click',(function(ti,pi){ return function(){ removeMember(ti,pi); };})(idx,i)); right.appendChild(x);} else { var f=document.createElement('button'); f.className='fillbtn'; f.textContent=I('rolling','추첨 중...'); f.addEventListener('click',(function(ti,pi,btn){ return function(){ fillVacancy(ti,pi,btn); };})(idx,i,f)); right.appendChild(f);} row.appendChild(left); row.appendChild(right); teamList.appendChild(row);} teamModal.classList.add('show'); }
   function closeTeam(){ teamModal.classList.remove('show'); }
 
   function removeMember(tIdx, pos){ var name=state.teams[tIdx][pos]; if(!name) return; state.teams[tIdx][pos]=null; renderTeams(); openTeam(tIdx); }
-  function fillVacancy(tIdx, pos, btn){ var pool=computePool(); if(pool.length===0){ showToast(I('none','뽑을 인원이 없습니다.')); return; } var id=setInterval(function(){ btn.textContent=pool[r(pool.length)]||I('rolling','추첨 중...'); },80); btn.disabled=true; setTimeout(function(){ clearInterval(id); var pick=pool[r(pool.length)]; state.teams[tIdx][pos]=pick; renderTeams(); openTeam(tIdx); burst(); },1000); }
+  function fillVacancy(tIdx, pos, btn){
+    var pool=computePool();
+    if(pool.length===0){ showToast(I('none','뽑을 인원이 없습니다.')); return; }
+    var final = pool[r(pool.length)];
+    var rolls = 12; var i=0;
+    btn.disabled = true;
+    var id = setInterval(function(){
+      var txt = (i < rolls - 1) ? (pool[r(pool.length)] || I('rolling','추첨 중...')) : final;
+      btn.textContent = txt;
+      i++;
+      if(i>=rolls){
+        clearInterval(id);
+        state.teams[tIdx][pos] = final;
+        renderTeams(); openTeam(tIdx); burst();
+      }
+    }, 80);
+  } var id=setInterval(function(){ btn.textContent=pool[r(pool.length)]||I('rolling','추첨 중...'); },80); btn.disabled=true; setTimeout(function(){ clearInterval(id); var pick=pool[r(pool.length)]; state.teams[tIdx][pos]=pick; renderTeams(); openTeam(tIdx); burst(); },1000); }
 
   function burst(){ var root=q('#confetti'); var EM=[I('e1','*'),I('e2','*'),I('e3','*'),I('e4','*'),'✨','💫','🌟']; for(var i=0;i<60;i++){ var s=document.createElement('span'); s.textContent=EM[r(EM.length)]||'*'; s.style.left=(Math.random()*100)+'%'; s.style.animationDelay=(Math.random()*0.6)+'s'; s.style.fontSize=(16+Math.random()*22)+'px'; root.appendChild(s); setTimeout((function(el){ return function(){ if(el.parentNode) el.parentNode.removeChild(el); };})(s),2400); } }
 
