@@ -4,96 +4,79 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>제15회 SNUPOOL배 대학부 수영대회 이벤트게임 · 4:4 랜덤 판다리기</title>
-  <meta name="description" content="전체화면으로 즐기는 실시간 랜덤 팀 배정: 물개/수달/돌고래/카피바라. 팝업으로 참가자 입력, 팀별 단일 추첨 애니메이션, 결원 교체 지원." />
+  <meta name="description" content="팀별 1명씩 랜덤 추첨 · 팝업 입력 · 결원 교체 · 전체화면 지원" />
   <link rel="icon" href="data:,">
   <style>
-    :root{
-      --bg:#080a12; --panel:#111423; --panel2:#151a2d; --muted:#a7b0c3; --text:#eef2ff; --accent:#60a5fa; --accent2:#22d3ee; --ring:rgba(96,165,250,.35);
-      --ok:#34d399; --warn:#f59e0b; --err:#ef4444;
-    }
+    :root{ --bg:#0a0c14; --panel:#0f162b; --panel2:#121a36; --muted:#a7b0c3; --text:#eef2ff; --ring:rgba(96,165,250,.35); }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0; background:radial-gradient(1200px 600px at 10% -10%, #0f1730 0%, #080a12 45%, #070910 100%); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size:clamp(18px,1.8vw,22px)}
+    body{margin:0; background:radial-gradient(1200px 600px at 10% -10%, #101a3a 0%, #0a0c14 45%, #080a12 100%); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size:clamp(18px,1.8vw,22px)}
 
-    /* 중복 렌더링 방지 (혹시 테마가 중복 주입할 때) */
-    body > .wrap:not(:first-of-type),
-    body > #confetti:not(:first-of-type),
-    body > .modal:not(:first-of-type),
-    body > .drawStage:not(:first-of-type){ display:none !important; }
-
-    .wrap{max-width:1400px; margin:0 auto; padding:26px 22px 100px}
-
+    .wrap{max-width:1400px; margin:0 auto; padding:28px 24px 120px}
     header{display:flex; align-items:center; gap:18px; flex-wrap:wrap}
     header .title{flex:1 1 auto}
-    h1{margin:.2rem 0 0; font-size:clamp(2.2rem,5.2vw,3.6rem)}
     .sub{color:#c7d2fe; font-weight:800; letter-spacing:.2px; font-size:clamp(1.2rem,1.8vw,1.4rem)}
+    h1{margin:.2rem 0 0; font-size:clamp(2.4rem,5.6vw,3.8rem)}
     .toolbar{display:flex; gap:12px; flex-wrap:wrap}
 
     .btn{appearance:none; border:1px solid #2a3557; background:linear-gradient(180deg,#1a2140,#121833); color:#eaf0ff; padding:14px 18px; border-radius:14px; cursor:pointer; font-weight:900; letter-spacing:.2px; transition:.18s transform,.18s opacity,.18s background; font-size:clamp(1.1rem,1.8vw,1.3rem)}
     .btn:hover{transform:translateY(-1px)}
     .btn[disabled]{opacity:.6; cursor:not-allowed}
-    .btn.primary{background:linear-gradient(180deg,#3157d3,#2345b3)}
-    .btn.ghost{background:transparent}
-    .btn.warn{background:linear-gradient(180deg,#8a5a09,#6a4307); border-color:#6a4307}
 
     .card{border:1px solid #1f2745; background:linear-gradient(180deg,#131a34,#0f152b); border-radius:22px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,.35)}
     .card .head{display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid #1b2342; background:radial-gradient(1200px 300px at -50% -80%, rgba(96,165,250,.12), transparent 60%)}
-    .card .head h3{margin:0; font-size:clamp(1.3rem,2vw,1.6rem)}
+    .card .head h3{margin:0; font-size:clamp(1.4rem,2.2vw,1.8rem)}
     .card .body{padding:20px}
+
+    .statbar{display:flex; gap:12px; flex-wrap:wrap}
+    .pill{border:1px solid #2a3557; border-radius:999px; padding:.5rem 1rem; font-size:clamp(1.05rem,1.6vw,1.2rem); color:#dbeafe}
 
     .teams{display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
     @media(max-width:980px){ .teams{grid-template-columns:1fr} }
     .team{border:1px solid #242c54; border-radius:20px; background:linear-gradient(180deg,#141a36,#12162d); transition:.2s transform,.2s border-color}
     .team:hover{transform:translateY(-2px); border-color:#334072}
-    .team .th{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; border-bottom:1px dashed #212a4e}
-    .team .th h4{margin:0; font-size:clamp(2.0rem,3.2vw,2.6rem)}
-    .team .th .right{display:flex; align-items:center; gap:10px}
-    .team .count{color:#cbd5e1; font-size:clamp(1.1rem,1.6vw,1.4rem)}
-    .team .th .right .btn{padding:10px 14px; font-size:clamp(1rem,1.6vw,1.2rem)}
-    .chips{display:flex; gap:12px; flex-wrap:wrap; padding:18px 18px}
-    .chip{border:1px solid #2a3557; background:#0e1430; padding:.55rem .9rem; border-radius:999px; font-size:clamp(1.6rem,2.6vw,2.2rem)}
-    .emptyChip{opacity:.6}
-
-    .statbar{display:flex; gap:12px; flex-wrap:wrap; margin-top:12px}
-    .pill{border:1px solid #2a3557; border-radius:999px; padding:.4rem .9rem; font-size:clamp(1.05rem,1.6vw,1.2rem); color:#dbeafe}
+    .team .th{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 20px; border-bottom:1px dashed #212a4e}
+    .team .th h4{margin:0; font-size:clamp(2.1rem,3.4vw,2.8rem)}
+    .team .th .right{display:flex; align-items:center; gap:12px}
+    .team .count{color:#cbd5e1; font-size:clamp(1.2rem,1.8vw,1.5rem)}
+    .team .th .right .btn{padding:10px 14px; font-size:clamp(1.05rem,1.6vw,1.2rem)}
+    .chips{display:flex; gap:14px; flex-wrap:wrap; padding:18px 20px}
+    .chip{border:1px solid #2a3557; background:#0e1430; padding:.65rem 1rem; border-radius:999px; font-size:clamp(1.9rem,3vw,2.4rem); font-weight:800}
+    .emptyChip{opacity:.55}
 
     .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:28px; background:#10213a; border:1px solid #274165; padding:12px 16px; border-radius:12px; color:#dbeafe; z-index:60; box-shadow:0 8px 24px rgba(0,0,0,.35); display:none; font-size:clamp(1.05rem,1.6vw,1.2rem)}
 
-    /* --- Modals (input/team/draw) --- */
+    /* Modals */
     .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:50}
     .modal.show{display:flex}
     .backdrop{position:absolute; inset:0; background:rgba(5,8,20,.7); backdrop-filter:blur(2px)}
     .sheet{position:relative; width:min(1100px,92vw); max-height:88vh; overflow:auto; border-radius:22px; border:1px solid #2a335a; background:linear-gradient(180deg,#121734,#0c1129); box-shadow:0 20px 80px rgba(0,0,0,.55)}
 
-    /* Input modal */
     .sheet .hd{display:flex; align-items:center; justify-content:space-between; padding:20px 22px; border-bottom:1px solid #1c2446}
     .sheet .hd h3{margin:0; font-size:clamp(1.6rem,2.4vw,2rem)}
     .sheet .bd{padding:20px 22px}
     textarea{width:100%; min-height:320px; resize:vertical; padding:18px; border-radius:16px; border:1px solid #273055; background:#0d1330; color:var(--text); line-height:1.55; font-size:clamp(1.3rem,1.9vw,1.6rem)}
     textarea:focus{outline:none; box-shadow:0 0 0 4px var(--ring)}
 
-    /* Team modal */
     .biglist{padding:24px}
     .bigrow{display:flex; align-items:center; justify-content:space-between; gap:18px; border:1px solid #263161; background:linear-gradient(180deg,#141b3f,#10163a); border-radius:18px; padding:22px; margin:14px 0}
-    .bigname{font-size:clamp(3.2rem,7.6vw,6.4rem); font-weight:900; letter-spacing:.3px}
+    .bigname{font-size:clamp(3.4rem,8vw,6.8rem); font-weight:900; letter-spacing:.3px}
     .bigrow .actions{display:flex; gap:12px; align-items:center}
-    .xbtn{appearance:none; border:1px solid #3a2540; background:linear-gradient(180deg,#401a25,#2a1016); color:#ffd7d7; padding:.7rem 1rem; border-radius:14px; cursor:pointer; font-weight:900; font-size:clamp(1.2rem,1.6vw,1.4rem)}
-    .fillbtn{appearance:none; border:1px solid #244a3a; background:linear-gradient(180deg,#135f43,#0e4a34); color:#d1fae5; padding:.8rem 1.1rem; border-radius:14px; cursor:pointer; font-weight:900; font-size:clamp(1.2rem,1.6vw,1.4rem)}
+    .xbtn{appearance:none; border:1px solid #3a2540; background:linear-gradient(180deg,#401a25,#2a1016); color:#ffd7d7; padding:.8rem 1rem; border-radius:14px; cursor:pointer; font-weight:900; font-size:clamp(1.2rem,1.6vw,1.4rem)}
+    .fillbtn{appearance:none; border:1px solid #244a3a; background:linear-gradient(180deg,#135f43,#0e4a34); color:#d1fae5; padding:.9rem 1.1rem; border-radius:14px; cursor:pointer; font-weight:900; font-size:clamp(1.2rem,1.6vw,1.4rem)}
 
     /* Draw overlay */
     .drawStage{position:fixed; inset:0; display:none; place-items:center; background:radial-gradient(1000px 400px at 50% -10%, rgba(34,211,238,.12), transparent 50%), radial-gradient(1200px 500px at 20% 120%, rgba(96,165,250,.15), transparent 60%), #070a14; z-index:70}
     .drawStage.show{display:grid}
     .drawInner{text-align:center}
-    .drawTitle{font-size:clamp(2.2rem,4.6vw,3.2rem); margin:0 0 18px}
-    .ticker{font-size:clamp(3.4rem,9.2vw,7.2rem); font-weight:900; letter-spacing:.8px}
+    .drawTitle{font-size:clamp(2.4rem,5vw,3.4rem); margin:0 0 18px}
+    .ticker{font-size:clamp(3.6rem,10vw,7.6rem); font-weight:900; letter-spacing:.8px}
     .ticker span{display:inline-block; animation:pop .15s ease}
     @keyframes pop{0%{transform:scale(1)} 50%{transform:scale(1.06)} 100%{transform:scale(1)}}
 
     .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden}
     .confetti span{position:absolute; top:-10px; font-size:18px; animation:drop 2.2s linear forwards; opacity:.95}
     @keyframes drop{to{transform:translateY(105vh) rotate(540deg); opacity:.9}}
-
-    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; border:1px solid #2a2f45; background:#101428; padding:.12rem .5rem; border-radius:6px}
   </style>
 </head>
 <body>
@@ -110,7 +93,7 @@
       </div>
     </header>
 
-    <section class="card" style="margin-top:12px">
+    <section class="card" style="margin-top:14px">
       <div class="head">
         <h3>팀 현황</h3>
         <div class="statbar">
@@ -131,14 +114,12 @@
   <div class="modal" id="inputModal" role="dialog" aria-modal="true">
     <div class="backdrop" data-close="input"></div>
     <div class="sheet" role="document">
-      <div class="hd">
-        <h3>참가자 입력</h3>
-      </div>
+      <div class="hd"><h3>참가자 입력</h3></div>
       <div class="bd">
-        <textarea id="names" placeholder="이름을 쉼표 또는 줄바꿈으로 구분해 붙여넣기"></textarea>
+        <textarea id="names" placeholder="이름을 쉼표(,) 또는 줄바꿈으로 구분하여 붙여넣기"></textarea>
         <div style="display:flex; gap:12px; align-items:center; justify-content:flex-end; margin-top:14px">
           <button class="btn" id="btnSaveNames" type="button">저장</button>
-          <button class="btn warn" id="btnCloseInput" type="button">닫기</button>
+          <button class="btn" id="btnCloseInput" type="button">닫기</button>
         </div>
       </div>
     </div>
@@ -150,22 +131,20 @@
     <div class="sheet" role="document" style="width:min(1200px,94vw)">
       <div class="hd">
         <h3 id="teamTitle">팀 상세</h3>
-        <div>
-          <button class="btn warn" id="btnCloseTeam" type="button">닫기</button>
-        </div>
+        <div><button class="btn" id="btnCloseTeam" type="button">닫기</button></div>
       </div>
       <div class="biglist" id="teamList"></div>
     </div>
   </div>
 
-  <!-- i18n (JS에는 ASCII만 유지, 실제 한글/이모지는 HTML 데이터 속성으로 전달) -->
+  <!-- 문자열/이모지는 HTML에서 공급 → JS는 ASCII-only로 유지 -->
   <div id="i18n" style="display:none"
        data-total="총 참가자" data-unique="중복 제거 후" data-bench="미선발"
-       data-empty-slot="빈 자리" data-removed="제거됨" data-need-input="먼저 참가자를 입력하세요." data-full="이미 4명이 모두 배정되었습니다." data-none-left="뽑을 인원이 없습니다."
-       data-draw-one="🎲 1명 뽑기" data-draw-title="팀 추첨중..." data-pick-rolling="추첨 중..."
+       data-empty="빈 자리" data-removed="제거됨" data-team="팀"
+       data-need-input="먼저 참가자를 입력하세요." data-full="이미 4명이 모두 배정되었습니다." data-none="뽑을 인원이 없습니다."
+       data-draw-one="🎲 1명 뽑기" data-drawing="팀 추첨중..." data-rolling="추첨 중..."
        data-t1="물개" data-t2="수달" data-t3="돌고래" data-t4="카피바라"
-       data-e1="🦭" data-e2="🦦" data-e3="🐬" data-e4="🐹"
-       data-btn-remove="제거" data-btn-fill="새 선수 뽑기"></div>
+       data-e1="🦭" data-e2="🦦" data-e3="🐬" data-e4="🐹"></div>
 
   <!-- 추첨 애니메이션 오버레이 -->
   <div class="drawStage" id="drawStage">
@@ -178,138 +157,58 @@
 <script>
 (function(){
   'use strict';
-  if (window.__SNUPOOL_444_INIT__) return; window.__SNUPOOL_444_INIT__ = true;
-
+  if(window.__APP_INIT__) return; window.__APP_INIT__ = true;
   function q(s, el){ return (el||document).querySelector(s); }
+  var IEl = q('#i18n'); function I(k, f){ var v=IEl? IEl.getAttribute('data-'+k):null; return v!=null? v : (f||''); }
 
-  // i18n from HTML (JS is ASCII-only)
-  var IEl = q('#i18n');
-  function I(key, fallback){ var v = IEl ? IEl.getAttribute('data-'+key) : null; return v!=null ? v : (fallback||''); }
-
-  var TEAM_INFO = [
+  var TEAM_INFO=[
     {key:I('t1','Team1'), emoji:I('e1','')},
     {key:I('t2','Team2'), emoji:I('e2','')},
     {key:I('t3','Team3'), emoji:I('e3','')},
-    {key:I('t4','Team4'), emoji:I('e4','')}
+    {key:I('t4','Team4'), emoji:I('e4','')},
   ];
 
-  var LS_KEY = 'snupool_teamwise_ascii_v2';
-  var state = { participants: [], teams:[[],[],[],[]] };
+  var state={ participants:[], teams:[[],[],[],[]] };
+  var teamsEl=q('#teams'), statTotal=q('#statTotal'), statUnique=q('#statUnique'), statBench=q('#statBench');
+  var toast=q('#toast'), inputModal=q('#inputModal'), namesEl=q('#names');
+  var teamModal=q('#teamModal'), teamTitle=q('#teamTitle'), teamList=q('#teamList');
+  var drawStage=q('#drawStage'), drawTitle=q('#drawTitle'), ticker=q('#ticker');
 
-  var teamsEl = q('#teams');
-  var statTotal = q('#statTotal');
-  var statUnique = q('#statUnique');
-  var statBench = q('#statBench');
-  var toast = q('#toast');
-  var inputModal = q('#inputModal');
-  var namesEl = q('#names');
-  var teamModal = q('#teamModal');
-  var teamTitle = q('#teamTitle');
-  var teamList = q('#teamList');
-  var drawStage = q('#drawStage');
-  var drawTitle = q('#drawTitle');
-  var ticker = q('#ticker');
+  function showToast(msg){ if(!toast) return; toast.textContent=msg; toast.style.display='block'; clearTimeout(showToast._t); showToast._t=setTimeout(function(){ toast.style.display='none'; },2200); }
+  function saveLS(){ try{ localStorage.setItem('snupool_v1', JSON.stringify({text:(namesEl&&namesEl.value)||''})); }catch(e){} }
+  function loadLS(){ try{ var s=JSON.parse(localStorage.getItem('snupool_v1')||'null'); if(s && s.text && namesEl){ namesEl.value=s.text; } }catch(e){} }
 
-  function showToast(msg){ if(!toast) return; toast.textContent = msg; toast.style.display='block'; clearTimeout(showToast._t); showToast._t = setTimeout(function(){ toast.style.display='none'; }, 2200); }
-  function saveLS(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({text:(namesEl && namesEl.value)||''})); }catch(e){} }
-  function loadLS(){ try{ var s = JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(s && s.text && namesEl){ namesEl.value = s.text; } }catch(e){} }
+  function parseNames(){ var raw=(namesEl&&namesEl.value?namesEl.value:''); raw=raw.split('\n').join(','); var parts=raw.split(','); var uniq=[],seen={},total=0; for(var i=0;i<parts.length;i++){ var x=(parts[i]||'').trim(); if(!x) continue; total++; if(!seen[x]){ seen[x]=1; uniq.push(x);} } if(statTotal) statTotal.textContent=I('total','Total')+' '+total+'명'; if(statUnique) statUnique.textContent=I('unique','Unique')+' '+uniq.length+'명'; return uniq; }
+  function flattenAssigned(){ var out=[],t,i,v; for(t=0;t<4;t++){ for(i=0;i<4;i++){ v=state.teams[t][i]; if(v) out.push(v);} } return out; }
+  function computePool(){ var assigned={}, a=flattenAssigned(), i, pool=[], n; for(i=0;i<a.length;i++){ assigned[a[i]]=1; } for(i=0;i<state.participants.length;i++){ n=state.participants[i]; if(!assigned[n]) pool.push(n);} return pool; }
+  function nextEmptyIndex(t){ for(var i=0;i<4;i++){ if(!state.teams[t][i]) return i; } return -1; }
+  function r(n){ return Math.floor(Math.random()*n); }
 
-  function parseNames(){
-    var raw = (namesEl && namesEl.value ? namesEl.value : '');
-    raw = raw.split('
-').join(',');
-    var parts = raw.split(',');
-    var uniq = [], seen = {}; var total = 0;
-    for (var i=0;i<parts.length;i++){
-      var x = parts[i] ? parts[i].trim() : ''; if(!x) continue; total++; if(!seen[x]){ seen[x]=1; uniq.push(x); }
-    }
-    if(statTotal) statTotal.textContent = I('total','Total') + ' ' + total + ' ';
-    if(statUnique) statUnique.textContent = I('unique','Unique') + ' ' + uniq.length + ' ';
-    return uniq;
-  }
+  function renderTeams(){ if(!teamsEl) return; teamsEl.innerHTML=''; for(var idx=0; idx<4; idx++){ var info=TEAM_INFO[idx]; var box=document.createElement('div'); box.className='team'; box.setAttribute('data-idx',''+idx);
+      var head=document.createElement('div'); head.className='th';
+      var title=document.createElement('h4'); var emo=document.createElement('span'); emo.textContent=info.emoji; emo.style.marginRight='12px'; title.appendChild(emo); title.appendChild(document.createTextNode(info.key+' '+I('team','팀')));
+      var right=document.createElement('div'); right.className='right'; var btn=document.createElement('button'); btn.className='btn teamDraw'; btn.setAttribute('data-team',''+idx); btn.textContent=I('draw-one','Draw one'); var c=document.createElement('div'); c.className='count'; c.textContent=String(state.teams[idx].filter(Boolean).length)+'/4'; right.appendChild(btn); right.appendChild(c); head.appendChild(title); head.appendChild(right);
+      var chips=document.createElement('div'); chips.className='chips'; for(var i=0;i<4;i++){ var name=state.teams[idx][i]; var sp=document.createElement('span'); sp.className='chip'+(name?'':' emptyChip'); sp.textContent=name||I('empty','빈 자리'); chips.appendChild(sp);} box.appendChild(head); box.appendChild(chips);
+      box.addEventListener('click', function(e){ var t=e.target; while(t && t.tagName!=='BUTTON') t=t.parentElement; if(t && t.classList && t.classList.contains('teamDraw')) return; var i=parseInt(this.getAttribute('data-idx'),10); openTeam(i); }); teamsEl.appendChild(box);} if(statBench) statBench.textContent=I('bench','미선발')+' '+computePool().length+'명'; }
 
-  function flattenAssigned(){ var out=[], t,i,v; for(t=0;t<4;t++){ for(i=0;i<4;i++){ v=state.teams[t][i]; if(v) out.push(v); } } return out; }
-  function computePool(){ var assigned={}, a=flattenAssigned(), i, pool=[], n; for(i=0;i<a.length;i++){ assigned[a[i]]=1; } for(i=0;i<state.participants.length;i++){ n=state.participants[i]; if(!assigned[n]) pool.push(n); } return pool; }
-  function nextEmptyIndex(tIdx){ for(var i=0;i<4;i++){ if(!state.teams[tIdx][i]) return i; } return -1; }
-  function rand(n){ return Math.floor(Math.random()*n); }
+  function animateDraw(list, title, done){ drawTitle.textContent=title||I('drawing','Drawing...'); drawStage.classList.add('show'); var count=0; var id=setInterval(function(){ var name=list.length? list[r(list.length)] : '-'; ticker.innerHTML=''; var s=document.createElement('span'); s.textContent=name; ticker.appendChild(s); count++; if(count>=26){ clearInterval(id);} },80); setTimeout(function(){ drawStage.classList.remove('show'); if(done) done(); },2200); }
 
-  function renderTeams(){
-    if(!teamsEl) return; teamsEl.innerHTML='';
-    for(var idx=0; idx<4; idx++){
-      var info = TEAM_INFO[idx];
-      var box = document.createElement('div'); box.className='team'; box.setAttribute('data-idx',''+idx);
+  function drawOneForTeam(tIdx){ if(state.participants.length===0){ showToast(I('need-input','먼저 참가자를 입력하세요.')); openInput(); return; } var slot=nextEmptyIndex(tIdx); if(slot===-1){ showToast(I('full','이미 4명이 모두 배정되었습니다.')); return; } var pool=computePool(); if(pool.length===0){ showToast(I('none','뽑을 인원이 없습니다.')); return; } var title=TEAM_INFO[tIdx].emoji+' '+TEAM_INFO[tIdx].key+' '+I('drawing','팀 추첨중...'); animateDraw(pool,title,function(){ var pick=pool[r(pool.length)]; state.teams[tIdx][slot]=pick; renderTeams(); burst(); }); }
 
-      var head = document.createElement('div'); head.className='th';
-      var title = document.createElement('h4');
-      var emo = document.createElement('span'); emo.textContent = info.emoji; emo.style.marginRight='12px';
-      title.appendChild(emo); title.appendChild(document.createTextNode(info.key + ' ' + I('team','Team')));
-      var right = document.createElement('div'); right.className='right';
-      var btn = document.createElement('button'); btn.className='btn teamDraw'; btn.setAttribute('data-team',''+idx); btn.textContent = I('draw-one','Draw one');
-      var countEl = document.createElement('div'); countEl.className='count'; countEl.textContent = String(state.teams[idx].filter(Boolean).length) + '/4';
-      right.appendChild(btn); right.appendChild(countEl);
-      head.appendChild(title); head.appendChild(right);
-
-      var chips = document.createElement('div'); chips.className='chips';
-      for(var i=0;i<4;i++){
-        var name = state.teams[idx][i];
-        var sp = document.createElement('span'); sp.className = 'chip' + (name? '' : ' emptyChip');
-        sp.textContent = name || I('empty-slot','EMPTY');
-        chips.appendChild(sp);
-      }
-      box.appendChild(head); box.appendChild(chips);
-      box.addEventListener('click', function(e){ var t=e.target; while(t && t.tagName!=='BUTTON') t=t.parentElement; if(t && t.classList && t.classList.contains('teamDraw')) return; var i=parseInt(this.getAttribute('data-idx'),10); openTeam(i); });
-      teamsEl.appendChild(box);
-    }
-    if(statBench) statBench.textContent = I('bench','Bench') + ' ' + computePool().length + ' ';
-  }
-
-  function animateDraw(list, title, done){
-    drawTitle.textContent = title || I('draw-title','Drawing...');
-    drawStage.classList.add('show');
-    var count=0; var id = setInterval(function(){ var name=list.length? list[rand(list.length)] : '-'; ticker.innerHTML=''; var s=document.createElement('span'); s.textContent=name; ticker.appendChild(s); count++; if(count>=26){ clearInterval(id); } }, 80);
-    setTimeout(function(){ drawStage.classList.remove('show'); if(done) done(); }, 2200);
-  }
-
-  function drawOneForTeam(tIdx){
-    if(state.participants.length === 0){ showToast(I('need-input','Please add participants first.')); openInput(); return; }
-    var slot=nextEmptyIndex(tIdx); if(slot===-1){ showToast(I('full','Already full.')); return; }
-    var pool = computePool(); if(pool.length===0){ showToast(I('none-left','No one left.')); return; }
-    var title = TEAM_INFO[tIdx].emoji + ' ' + TEAM_INFO[tIdx].key + ' ' + I('draw-title','Drawing...');
-    animateDraw(pool, title, function(){ var pick = pool[rand(pool.length)]; state.teams[tIdx][slot]=pick; renderTeams(); burstConfetti(); });
-  }
-
-  function openTeam(idx){
-    teamTitle.textContent = TEAM_INFO[idx].emoji + ' ' + TEAM_INFO[idx].key + ' ' + I('team','Team');
-    teamList.innerHTML='';
-    for(var i=0;i<4;i++){
-      var row=document.createElement('div'); row.className='bigrow'; row.setAttribute('data-pos',''+i); row.setAttribute('data-team',''+idx);
-      var left=document.createElement('div'); left.className='bigname'; left.textContent= state.teams[idx][i] || '- EMPTY -';
-      var right=document.createElement('div'); right.className='actions';
-      if(state.teams[idx][i]){
-         var x=document.createElement('button'); x.className='xbtn'; x.textContent='X ' + I('btn-remove','Remove'); x.addEventListener('click',(function(ti,pi){return function(){ removeMember(ti,pi); };})(idx,i)); right.appendChild(x);
-      } else {
-         var f=document.createElement('button'); f.className='fillbtn'; f.textContent=I('btn-fill','Draw'); f.addEventListener('click',(function(ti,pi,btn){return function(){ fillVacancy(ti,pi,btn); };})(idx,i,f)); right.appendChild(f);
-      }
-      row.appendChild(left); row.appendChild(right); teamList.appendChild(row);
-    }
-    teamModal.classList.add('show');
-  }
+  function openTeam(idx){ teamTitle.textContent=TEAM_INFO[idx].emoji+' '+TEAM_INFO[idx].key+' '+I('team','팀'); teamList.innerHTML=''; for(var i=0;i<4;i++){ var row=document.createElement('div'); row.className='bigrow'; row.setAttribute('data-pos',''+i); row.setAttribute('data-team',''+idx); var left=document.createElement('div'); left.className='bigname'; left.textContent=state.teams[idx][i]||'- '+I('empty','빈 자리')+' -'; var right=document.createElement('div'); right.className='actions'; if(state.teams[idx][i]){ var x=document.createElement('button'); x.className='xbtn'; x.textContent='X '+I('removed','제거됨'); x.addEventListener('click',(function(ti,pi){ return function(){ removeMember(ti,pi); };})(idx,i)); right.appendChild(x);} else { var f=document.createElement('button'); f.className='fillbtn'; f.textContent=I('rolling','추첨 중...'); f.addEventListener('click',(function(ti,pi,btn){ return function(){ fillVacancy(ti,pi,btn); };})(idx,i,f)); right.appendChild(f);} row.appendChild(left); row.appendChild(right); teamList.appendChild(row);} teamModal.classList.add('show'); }
   function closeTeam(){ teamModal.classList.remove('show'); }
 
-  function removeMember(tIdx, pos){ var name=state.teams[tIdx][pos]; if(!name) return; state.teams[tIdx][pos]=null; showToast(TEAM_INFO[tIdx].key + ' ' + I('team','Team') + ': ' + name + ' ' + I('removed','removed')); renderTeams(); openTeam(tIdx); }
+  function removeMember(tIdx, pos){ var name=state.teams[tIdx][pos]; if(!name) return; state.teams[tIdx][pos]=null; renderTeams(); openTeam(tIdx); }
+  function fillVacancy(tIdx, pos, btn){ var pool=computePool(); if(pool.length===0){ showToast(I('none','뽑을 인원이 없습니다.')); return; } var id=setInterval(function(){ btn.textContent=pool[r(pool.length)]||I('rolling','추첨 중...'); },80); btn.disabled=true; setTimeout(function(){ clearInterval(id); var pick=pool[r(pool.length)]; state.teams[tIdx][pos]=pick; renderTeams(); openTeam(tIdx); burst(); },1000); }
 
-  function fillVacancy(tIdx, pos, btnEl){ var pool = computePool(); if(pool.length===0){ showToast(I('none-left','No one left.')); return; } var id=setInterval(function(){ btnEl.textContent=(pool[rand(pool.length)] || I('pick-rolling','Drawing...')); }, 80); btnEl.disabled=true; setTimeout(function(){ clearInterval(id); var pick=pool[rand(pool.length)]; state.teams[tIdx][pos]=pick; renderTeams(); openTeam(tIdx); burstConfetti(); }, 1000); }
-
-  function burstConfetti(){ var root = q('#confetti'); var EM = [I('e1','*'), I('e2','*'), I('e3','*'), I('e4','*'), '*']; for(var i=0;i<60;i++){ var s=document.createElement('span'); s.textContent=EM[rand(EM.length)]||'*'; s.style.left=(Math.random()*100)+'%'; s.style.animationDelay=(Math.random()*0.6)+'s'; s.style.fontSize=(16+Math.random()*22)+'px'; root.appendChild(s); setTimeout((function(el){ return function(){ if(el.parentNode) el.parentNode.removeChild(el); };})(s),2400); } }
+  function burst(){ var root=q('#confetti'); var EM=[I('e1','*'),I('e2','*'),I('e3','*'),I('e4','*'),'✨','💫','🌟']; for(var i=0;i<60;i++){ var s=document.createElement('span'); s.textContent=EM[r(EM.length)]||'*'; s.style.left=(Math.random()*100)+'%'; s.style.animationDelay=(Math.random()*0.6)+'s'; s.style.fontSize=(16+Math.random()*22)+'px'; root.appendChild(s); setTimeout((function(el){ return function(){ if(el.parentNode) el.parentNode.removeChild(el); };})(s),2400); } }
 
   function openInput(){ inputModal.classList.add('show'); }
   function closeInput(){ inputModal.classList.remove('show'); }
 
-  document.addEventListener('click', function(e){ var t=e.target; while(t && t.tagName!=='BUTTON') t=t.parentElement; if(!t) return; var id=t.id; if(id==='btnOpenInput'){ openInput(); return; } if(id==='btnCloseInput'){ closeInput(); return; } if(id==='btnSaveNames'){ var u=parseNames(); state.participants=u.slice(0); saveLS(); showToast(String(u.length)+' saved'); renderTeams(); return; } if(id==='btnCloseTeam'){ closeTeam(); return; } if(id==='btnFullscreen'){ try{ if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); } else { document.exitFullscreen(); } } catch(e){ showToast('Use F11'); } return; } if(t.classList.contains('teamDraw')){ var team=parseInt(t.getAttribute('data-team'),10); drawOneForTeam(team); return; } });
+  document.addEventListener('click', function(e){ var t=e.target; while(t && t.tagName!=='BUTTON') t=t.parentElement; if(!t) return; var id=t.id; if(id==='btnOpenInput'){ openInput(); return; } if(id==='btnCloseInput'){ closeInput(); return; } if(id==='btnSaveNames'){ var u=parseNames(); state.participants=u.slice(0); saveLS(); renderTeams(); return; } if(id==='btnCloseTeam'){ closeTeam(); return; } if(id==='btnFullscreen'){ try{ if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); } else { document.exitFullscreen(); } }catch(e){ showToast('F11 키를 사용하세요.'); } return; } if(t.classList.contains('teamDraw')){ var tm=parseInt(t.getAttribute('data-team'),10); drawOneForTeam(tm); return; } });
 
-  if(namesEl){ namesEl.addEventListener('input', saveLS); namesEl.addEventListener('keydown', function(e){ if((e.metaKey||e.ctrlKey) && e.key==='Enter'){ e.preventDefault(); var b=document.getElementById('btnSaveNames'); if(b) b.click(); } }); }
-
-  loadLS(); state.participants = parseNames().slice(0); renderTeams();
+  loadLS(); state.participants=parseNames().slice(0); renderTeams();
 })();
 </script>
 </body>
