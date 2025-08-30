@@ -212,12 +212,16 @@ try{
   function loadLS(){ try{ const s = JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(s && s.text){ namesEl.value = s.text; } }catch(e){} }
 
   function parseNames(){
-    const raw = (namesEl?.value || '').replace(/
-/g, ',');
+    const raw = (namesEl?.value || '').split('
+').join(',');
     const arr = raw.split(',').map(s=> s.trim()).filter(Boolean);
     const total = arr.length;
     const uniq = []; const seen = new Set();
     for(const n of arr){ if(!seen.has(n)){ uniq.push(n); seen.add(n);} }
+    if(statTotal) statTotal.textContent = `총 참가자 ${total}명`;
+    if(statUnique) statUnique.textContent = `중복 제거 후 ${uniq.length}명`;
+    return uniq;
+  } }
     if(statTotal) statTotal.textContent = `총 참가자 ${total}명`;
     if(statUnique) statUnique.textContent = `중복 제거 후 ${uniq.length}명`;
     return uniq;
