@@ -167,149 +167,149 @@
   </div>
 
 <script>
-try{
 (function(){
-  if(window.__SNUPOOL_444_INIT__){ return; }
+  if (window.__SNUPOOL_444_INIT__) return;
   window.__SNUPOOL_444_INIT__ = true;
-  (function dedupe(){
-    const keepFirst = (sel)=>{ const nodes = document.querySelectorAll(sel); for(let i=1;i<nodes.length;i++){ nodes[i].remove(); } };
-    keepFirst('body > .wrap');
-    ['#confetti','#inputModal','#teamModal','#drawStage'].forEach(keepFirst);
-  })();
 
-  const $ = (s,el=document)=> el.querySelector(s);
-  const $$ = (s,el=document)=> Array.from(el.querySelectorAll(s));
+  function q(s, el){ return (el||document).querySelector(s); }
 
-  const TEAM_INFO = [
+  var TEAM_INFO = [
     {key:'물개', emoji:'🦭'},
     {key:'수달', emoji:'🦦'},
     {key:'돌고래', emoji:'🐬'},
-    {key:'카피바라', emoji:'🐹'},
+    {key:'카피바라', emoji:'🐹'}
   ];
 
-  const LS_KEY = 'snupool_random_444_v_teamwise_v2';
-  const state = { participants: [], teams: [[],[],[],[]] };
+  var LS_KEY = 'snupool_random_444_v_teamwise_v3';
+  var state = { participants: [], teams: [[],[],[],[]] };
 
-  const teamsEl = $('#teams');
-  const statTotal = $('#statTotal');
-  const statUnique = $('#statUnique');
-  const statBench = $('#statBench');
-  const toastEl = $('#toast');
-  const inputModal = $('#inputModal');
-  const namesEl = $('#names');
-  const teamModal = $('#teamModal');
-  const teamTitle = $('#teamTitle');
-  const teamList = $('#teamList');
-  const drawStage = $('#drawStage');
-  const drawTitle = $('#drawTitle');
-  const ticker = $('#ticker');
+  var teamsEl = q('#teams');
+  var statTotal = q('#statTotal');
+  var statUnique = q('#statUnique');
+  var statBench = q('#statBench');
+  var toast = q('#toast');
+  var inputModal = q('#inputModal');
+  var namesEl = q('#names');
+  var teamModal = q('#teamModal');
+  var teamTitle = q('#teamTitle');
+  var teamList = q('#teamList');
+  var drawStage = q('#drawStage');
+  var drawTitle = q('#drawTitle');
+  var ticker = q('#ticker');
 
   function showToast(msg){
-    if(!toastEl) return; toastEl.textContent = msg; toastEl.style.display='block';
-    clearTimeout(showToast._t); showToast._t = setTimeout(()=> toastEl.style.display='none', 2200);
+    if(!toast) return; toast.textContent = msg; toast.style.display = 'block';
+    clearTimeout(showToast._t); showToast._t = setTimeout(function(){ toast.style.display='none'; }, 2200);
   }
-  function saveLS(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({text:namesEl.value})); }catch(e){} }
-  function loadLS(){ try{ const s = JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(s && s.text){ namesEl.value = s.text; } }catch(e){} }
+  function saveLS(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({text:(namesEl && namesEl.value)||''})); }catch(e){} }
+  function loadLS(){ try{ var s = JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(s && s.text && namesEl){ namesEl.value = s.text; } }catch(e){} }
 
   function parseNames(){
-    const raw = (namesEl?.value || '').split('
+    var raw = (namesEl && namesEl.value ? namesEl.value : '');
+    raw = raw.split('
 ').join(',');
-    const arr = raw.split(',').map(s=> s.trim()).filter(Boolean);
-    const total = arr.length;
-    const uniq = []; const seen = new Set();
-    for(const n of arr){ if(!seen.has(n)){ uniq.push(n); seen.add(n);} }
-    if(statTotal) statTotal.textContent = `총 참가자 ${total}명`;
-    if(statUnique) statUnique.textContent = `중복 제거 후 ${uniq.length}명`;
-    return uniq;
-  } }
-    if(statTotal) statTotal.textContent = `총 참가자 ${total}명`;
-    if(statUnique) statUnique.textContent = `중복 제거 후 ${uniq.length}명`;
+    var parts = raw.split(',');
+    var uniq = [], seen = {};
+    for (var i=0;i<parts.length;i++){
+      var x = parts[i].trim();
+      if(!x) continue;
+      if(!seen[x]){ seen[x]=1; uniq.push(x); }
+    }
+    if(statTotal) statTotal.textContent = '총 참가자 ' + parts.filter(function(x){return x.trim();}).length + '명';
+    if(statUnique) statUnique.textContent = '중복 제거 후 ' + uniq.length + '명';
     return uniq;
   }
 
   function flattenAssigned(){
-    const out = [];
-    for(let t=0;t<4;t++){
-      const row = state.teams[t];
-      for(let i=0;i<4;i++){
-        const v = row[i]; if(v) out.push(v);
-      }
+    var out=[];
+    for (var t=0;t<4;t++){
+      var row = state.teams[t];
+      for (var i=0;i<4;i++){ var v=row[i]; if(v) out.push(v); }
     }
     return out;
   }
   function computePool(){
-    const assigned = new Set(flattenAssigned());
-    const ret = [];
-    for(const n of state.participants){ if(!assigned.has(n)) ret.push(n); }
-    return ret;
+    var assigned = {};
+    var a = flattenAssigned();
+    for (var i=0;i<a.length;i++){ assigned[a[i]] = 1; }
+    var pool=[];
+    for (var j=0;j<state.participants.length;j++){
+      var n = state.participants[j]; if(!assigned[n]) pool.push(n);
+    }
+    return pool;
   }
-  function nextEmptyIndex(tIdx){ for(let i=0;i<4;i++){ if(!state.teams[tIdx][i]) return i; } return -1; }
-  function rand(n){ return (Math.random()*n)|0; }
+  function nextEmptyIndex(tIdx){ for (var i=0;i<4;i++){ if(!state.teams[tIdx][i]) return i; } return -1; }
+  function rand(n){ return Math.floor(Math.random()*n); }
 
   function renderTeams(){
     if(!teamsEl) return;
-    teamsEl.innerHTML = '';
-    TEAM_INFO.forEach((info, idx)=>{
-      const box = document.createElement('div'); box.className='team'; box.dataset.idx = idx;
-      const head = document.createElement('div'); head.className='th';
-      const count = state.teams[idx].filter(Boolean).length;
-      const right = document.createElement('div'); right.className='right';
-      const drawBtn = document.createElement('button'); drawBtn.className='btn teamDraw'; drawBtn.dataset.team = String(idx); drawBtn.textContent='🎲 1명 뽑기';
-      right.appendChild(drawBtn);
-      const countEl = document.createElement('div'); countEl.className='count'; countEl.textContent = `${count}/4`;
-      right.appendChild(countEl);
-      const title = document.createElement('h4'); title.innerHTML = '<span style="margin-right:12px">'+info.emoji+'</span>'+info.key+' 팀';
+    teamsEl.innerHTML='';
+    for (var idx=0; idx<4; idx++){
+      var info = TEAM_INFO[idx];
+      var box = document.createElement('div'); box.className='team'; box.setAttribute('data-idx',''+idx);
+
+      var head = document.createElement('div'); head.className='th';
+      var title = document.createElement('h4');
+      var emo = document.createElement('span'); emo.textContent = info.emoji; emo.style.marginRight='12px';
+      title.appendChild(emo); title.appendChild(document.createTextNode(info.key + ' 팀'));
+      var right = document.createElement('div'); right.className='right';
+      var btn = document.createElement('button'); btn.className='btn teamDraw'; btn.setAttribute('data-team',''+idx); btn.textContent='🎲 1명 뽑기';
+      var countEl = document.createElement('div'); countEl.className='count'; countEl.textContent = state.teams[idx].filter(Boolean).length + '/4';
+      right.appendChild(btn); right.appendChild(countEl);
       head.appendChild(title); head.appendChild(right);
 
-      const chips = document.createElement('div'); chips.className='chips';
-      for(let i=0;i<4;i++){
-        const name = state.teams[idx][i];
-        const span = document.createElement('span'); span.className = 'chip' + (name?'' : ' emptyChip'); span.textContent = name || '빈 자리'; chips.appendChild(span);
+      var chips = document.createElement('div'); chips.className='chips';
+      for (var i=0;i<4;i++){
+        var name = state.teams[idx][i];
+        var sp = document.createElement('span'); sp.className = 'chip' + (name?'' : ' emptyChip'); sp.textContent = name || '빈 자리'; chips.appendChild(sp);
       }
 
       box.appendChild(head); box.appendChild(chips);
-      box.addEventListener('click', (e)=>{ if(!(e.target && e.target.closest('.teamDraw'))) openTeam(idx); });
+      box.addEventListener('click', function(e){
+        var t = e.target; while(t && t.tagName !== 'BUTTON') t = t.parentElement;
+        if (t && t.classList && t.classList.contains('teamDraw')) return;
+        var idx = parseInt(this.getAttribute('data-idx'),10); openTeam(idx);
+      });
       teamsEl.appendChild(box);
-    });
-    if(statBench) statBench.textContent = `미선발 ${computePool().length}명`;
+    }
+    if(statBench) statBench.textContent = '미선발 ' + computePool().length + '명';
   }
 
   function animateDraw(list, title){
     drawTitle.textContent = title || '추첨중…';
     drawStage.classList.add('show');
-    let count = 0;
-    const id = setInterval(()=>{
-      const name = list[rand(list.length)] || '—';
-      ticker.innerHTML = '<span>'+name+'</span>';
+    var count=0;
+    var id = setInterval(function(){
+      var name = list[rand(list.length)] || '—';
+      ticker.innerHTML=''; var s=document.createElement('span'); s.textContent=name; ticker.appendChild(s);
       count++; if(count>=26){ clearInterval(id); }
     }, 80);
-    return new Promise(res=> setTimeout(()=>{ drawStage.classList.remove('show'); res(); }, 2200));
+    return new Promise(function(res){ setTimeout(function(){ drawStage.classList.remove('show'); res(); }, 2200); });
   }
 
   async function drawOneForTeam(tIdx){
     if(state.participants.length === 0){ showToast('먼저 참가자를 입력하세요.'); openInput(); return; }
-    const slot = nextEmptyIndex(tIdx); if(slot === -1){ showToast('이미 4명이 모두 배정되었습니다.'); return; }
-    const pool = computePool(); if(pool.length === 0){ showToast('뽑을 인원이 없습니다.'); return; }
-    const info = TEAM_INFO[tIdx];
+    var slot = nextEmptyIndex(tIdx); if(slot === -1){ showToast('이미 4명이 모두 배정되었습니다.'); return; }
+    var pool = computePool(); if(pool.length === 0){ showToast('뽑을 인원이 없습니다.'); return; }
+    var info = TEAM_INFO[tIdx];
     await animateDraw(pool, info.emoji+' '+info.key+' 팀 추첨중…');
-    const pick = pool[rand(pool.length)];
+    var pick = pool[rand(pool.length)];
     state.teams[tIdx][slot] = pick;
     renderTeams();
     burstConfetti();
   }
 
   function openTeam(idx){
-    teamTitle.textContent = TEAM_INFO[idx].emoji+' '+TEAM_INFO[idx].key+' 팀';
-    teamList.innerHTML = '';
-    for(let i=0;i<4;i++){
-      const row = document.createElement('div'); row.className='bigrow'; row.dataset.pos = String(i); row.dataset.team = String(idx);
-      const name = state.teams[idx][i];
-      const left = document.createElement('div'); left.className='bigname'; left.textContent = name || '— 빈 자리 —';
-      const right = document.createElement('div'); right.className='actions';
-      if(name){
-        const x = document.createElement('button'); x.className='xbtn'; x.textContent='✕ 제거'; x.addEventListener('click', ()=> removeMember(idx,i)); right.appendChild(x);
+    teamTitle.textContent = TEAM_INFO[idx].emoji + ' ' + TEAM_INFO[idx].key + ' 팀';
+    teamList.innerHTML='';
+    for(var i=0;i<4;i++){
+      var row = document.createElement('div'); row.className='bigrow'; row.setAttribute('data-pos',''+i); row.setAttribute('data-team',''+idx);
+      var left = document.createElement('div'); left.className='bigname'; left.textContent = state.teams[idx][i] || '— 빈 자리 —';
+      var right = document.createElement('div'); right.className='actions';
+      if(state.teams[idx][i]){
+        var x = document.createElement('button'); x.className='xbtn'; x.textContent='✕ 제거'; x.addEventListener('click', (function(ti,pi){ return function(){ removeMember(ti,pi); };})(idx,i)); right.appendChild(x);
       } else {
-        const f = document.createElement('button'); f.className='fillbtn'; f.textContent='새 선수 뽑기'; f.addEventListener('click', ()=> fillVacancy(idx,i, f)); right.appendChild(f);
+        var f = document.createElement('button'); f.className='fillbtn'; f.textContent='새 선수 뽑기'; f.addEventListener('click', (function(ti,pi,btn){ return function(){ fillVacancy(ti,pi,btn); };})(idx,i,f)); right.appendChild(f);
       }
       row.appendChild(left); row.appendChild(right); teamList.appendChild(row);
     }
@@ -318,62 +318,52 @@ try{
   function closeTeam(){ teamModal.classList.remove('show'); }
 
   function removeMember(tIdx, pos){
-    const name = state.teams[tIdx][pos]; if(!name) return;
+    var name = state.teams[tIdx][pos]; if(!name) return;
     state.teams[tIdx][pos] = null;
-    showToast(TEAM_INFO[tIdx].key+' 팀: '+name+' 제거됨');
+    showToast(TEAM_INFO[tIdx].key + ' 팀: ' + name + ' 제거됨');
     renderTeams(); openTeam(tIdx);
   }
 
   function fillVacancy(tIdx, pos, btnEl){
-    const pool = computePool(); if(pool.length===0){ showToast('뽑을 인원이 없습니다.'); return; }
-    const id = setInterval(()=>{ btnEl.textContent = pool[rand(pool.length)] || '추첨 중…'; }, 80);
+    var pool = computePool(); if(pool.length===0){ showToast('뽑을 인원이 없습니다.'); return; }
+    var id = setInterval(function(){ btnEl.textContent = pool[rand(pool.length)] || '추첨 중…'; }, 80);
     btnEl.disabled = true;
-    setTimeout(()=>{
+    setTimeout(function(){
       clearInterval(id);
-      const pick = pool[rand(pool.length)];
+      var pick = pool[rand(pool.length)];
       state.teams[tIdx][pos] = pick;
       renderTeams(); openTeam(tIdx); burstConfetti();
     }, 1000);
   }
 
   function burstConfetti(){
-    const root = $('#confetti'); const EMO = ['🎉','🎊','✨','💫','🌟'];
-    for(let i=0;i<60;i++){
-      const s = document.createElement('span'); s.textContent = EMO[rand(EMO.length)]; s.style.left = (Math.random()*100)+'%'; s.style.animationDelay = (Math.random()*0.6)+'s'; s.style.fontSize = (16 + Math.random()*22)+'px'; root.appendChild(s); setTimeout(()=> s.remove(), 2400);
+    var root = q('#confetti'); var EMO=['🎉','🎊','✨','💫','🌟'];
+    for(var i=0;i<60;i++){
+      var s=document.createElement('span'); s.textContent=EMO[rand(EMO.length)]; s.style.left=(Math.random()*100)+'%'; s.style.animationDelay=(Math.random()*0.6)+'s'; s.style.fontSize=(16+Math.random()*22)+'px'; root.appendChild(s); setTimeout((function(el){ return function(){ el.parentNode && el.parentNode.removeChild(el); };})(s),2400);
     }
   }
 
   function openInput(){ inputModal.classList.add('show'); }
   function closeInput(){ inputModal.classList.remove('show'); }
 
-  document.addEventListener('click', (e)=>{
-    const t = e.target.closest('button'); if(!t) return;
-    const id = t.id;
-    if(id==='btnOpenInput') return openInput();
-    if(id==='btnCloseInput') return closeInput();
-    if(id==='btnSaveNames'){ const u=parseNames(); state.participants = u.slice(); saveLS(); showToast(u.length+'명 저장됨'); renderTeams(); return; }
-    if(id==='btnCloseTeam') return closeTeam();
+  document.addEventListener('click', function(e){
+    var t = e.target; while(t && t.tagName !== 'BUTTON') t = t.parentElement; if(!t) return;
+    var id = t.id;
+    if(id==='btnOpenInput'){ openInput(); return; }
+    if(id==='btnCloseInput'){ closeInput(); return; }
+    if(id==='btnSaveNames'){ var u=parseNames(); state.participants=u.slice(0); saveLS(); showToast(u.length+'명 저장됨'); renderTeams(); return; }
+    if(id==='btnCloseTeam'){ closeTeam(); return; }
     if(id==='btnFullscreen'){
-      (async()=>{ try{ if(!document.fullscreenElement){ await document.documentElement.requestFullscreen(); } else{ await document.exitFullscreen(); } }catch(e){ showToast('전체화면을 사용할 수 없습니다. F11 키를 사용하세요.'); } })(); return;
+      try{ if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); } else { document.exitFullscreen(); } }catch(e){ showToast('전체화면을 사용할 수 없습니다. F11 키를 사용하세요.'); }
+      return;
     }
-    if(t.classList.contains('teamDraw')){ const team = parseInt(t.dataset.team,10); return drawOneForTeam(team); }
+    if(t.classList.contains('teamDraw')){ var team=parseInt(t.getAttribute('data-team'),10); drawOneForTeam(team); return; }
   });
 
-  namesEl.addEventListener('input', saveLS);
-  namesEl.addEventListener('keydown', (e)=>{ if((e.metaKey||e.ctrlKey) && e.key==='Enter'){ e.preventDefault(); const b=$('#btnSaveNames'); if(b) b.click(); } });
+  if(namesEl){ namesEl.addEventListener('input', saveLS); namesEl.addEventListener('keydown', function(e){ if((e.metaKey||e.ctrlKey) && e.key==='Enter'){ e.preventDefault(); var b=document.getElementById('btnSaveNames'); if(b) b.click(); } }); }
 
-  loadLS();
-  const u = parseNames(); state.participants = u.slice();
-  renderTeams();
+  loadLS(); state.participants = parseNames().slice(0); renderTeams();
 })();
-}catch(err){
-  // 🔴 치명적 오류 시 화면에 바로 표시 (디버깅용)
-  const box = document.createElement('div');
-  box.style.cssText = 'position:fixed;inset:20px;z-index:1000;background:#1b1020;color:#ffdede;border:1px solid #5a2a2a;padding:16px;border-radius:12px;font-family:ui-monospace,monospace;white-space:pre-wrap;';
-  box.textContent = '스크립트 오류로 UI를 표시하지 못했습니다.
-'+String(err?.message||err);
-  document.body.appendChild(box);
-}
 </script>
 </body>
 </html>
