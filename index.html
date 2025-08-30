@@ -97,9 +97,8 @@
   <div class="wrap">
     <header>
       <div class="title">
-        <div class="sub">제15회 SNUPOOL배 대학부 수영대회 · 이벤트 게임</div>
+        <div class="sub">제15회 SNUPOOL배 대학부 수영대회 · 이벤트 게임 1</div>
         <h1>4:4 랜덤 판다리기</h1>
-        <div class="muted" style="margin-top:4px">전체 화면으로 띄우고 진행하세요. 오른쪽 상단 버튼으로 참가자 입력/추첨을 제어합니다.</div>
       </div>
       <div class="toolbar">
         <button class="btn" id="btnFullscreen" type="button">⛶ 전체화면</button>
@@ -112,9 +111,6 @@
     <section class="card" style="margin-top:12px">
       <div class="head"><h3>팀 현황</h3>
         <div class="statbar">
-          <span class="pill" id="statTotal">총 참가자 0명</span>
-          <span class="pill" id="statUnique">중복 제거 후 0명</span>
-          <span class="pill" id="statBench">미선발 0명</span>
         </div>
       </div>
       <div class="body">
@@ -131,14 +127,12 @@
     <div class="sheet" role="document">
       <div class="hd">
         <h3>참가자 입력</h3>
-        <div class="muted">쉼표(,) 또는 줄바꿈으로 구분 · 중복 자동 제거</div>
       </div>
       <div class="bd">
         <textarea id="names" placeholder="예) 홍길동, 김영희, 이철수, ..."></textarea>
         <div style="display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:10px">
           <div class="muted">Tip: <span class="kbd">Cmd/Ctrl + Enter</span> 저장</div>
           <div>
-            <button class="btn ghost" id="btnSample" type="button">예시 불러오기</button>
             <button class="btn" id="btnSaveNames" type="button">저장</button>
             <button class="btn warn" id="btnCloseInput" type="button">닫기</button>
           </div>
